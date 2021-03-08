@@ -1,0 +1,33 @@
+{
+  "name": "reddit-backend",
+  "version": "1.0.0",
+  "description": "open online forum",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanmayshishodia/reddit-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanmayshishodia/reddit-backend/issues"
+  },
+  "homepage": "https://github.com/tanmayshishodia/reddit-backend#readme",
+  "dependencies": {
+    "connect-mongo": "^4.3.0",
+    "dotenv": "^8.2.0",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.11.19",
+    "morgan": "^1.10.0",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
