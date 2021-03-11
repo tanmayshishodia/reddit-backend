@@ -1,5 +1,6 @@
-//User POST
 const mongoose = require('mongoose')
+
+//User POST
 const uploadPostSchema = new mongoose.Schema({
     uid : {
         type: String,

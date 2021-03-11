@@ -4,7 +4,7 @@ const uploadPostModel = require('../models/Post')
 
 
 //Handling uploads
-exports.uploads = (req, res, next) => {
+exports.uploads = async(req, res, next) => {
     //retrived files from uploads
     const files = req.files;
 
@@ -62,26 +62,14 @@ exports.uploads = (req, res, next) => {
     //appending voteCount to post
     post = {...post, ...voteCount}
 
-    //pushing in db
+
+    //uploading to server
     let newUpload = new uploadPostModel(post);
 
-    return newUpload
-        .save()
-        .then(() => {
-            return { msg: '${files[0].originalname} Uploaded successfully!' }
-        })
-        .catch(error => {
-            if(error) {
-                return Promise.reject({error: error.message || 'Cannot upload! Something missing.'})
-            }
-        });
-
-    res.json(files)
-    Promise.all(result)
-        .then(msg => {
-            res.json(msg);
-        })
-        .catch(err => {
-            res.json(err);
-        })
+    try{
+        const a1 =  await newUpload.save() 
+        res.json(a1)
+    }catch(err){
+        res.send(err)
+    }
 }
