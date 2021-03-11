@@ -25,5 +25,5 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
 })
-
+//keep a name for this operation
 module.exports = mongoose.model('User', UserSchema)
