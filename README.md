@@ -7,6 +7,7 @@ A web application for an open forum platform. Users can create a post and add co
 ## Requirements
 
 ## ER Diagram
+![alt text](http://url/to/img.png)
 
 ## API Documentation
 
