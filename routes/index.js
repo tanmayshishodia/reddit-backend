@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
+const upload = require('../middleware/multer')
 
 const post = require('../controller/post')
-const multer = require('../middleware/multer')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -14,7 +14,7 @@ router.get('/', ensureGuest, (req, res) => {
 
 
 //@route upload   POST /
-router.post('/upload', store.array('images', 1), post.uploads)
+router.post('/upload', upload, post.uploads)
 
 // // @desc    Dashboard
 // // @route   GET /dashboard

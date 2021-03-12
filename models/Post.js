@@ -17,17 +17,29 @@ const uploadPostSchema = new mongoose.Schema({
         unique: false,
         required: false
     },
+    Etag : {
+        type : String,
+        unique: false,
+        required: false
+    },
+    Location : {
+        type : String,
+        unique: false,
+        required: false
+    },
+    key : {
+        type : String,
+        unique: false,
+        required: false
+    },
+    bucket : {
+        type : String,
+        unique: false,
+        required: false
+    },
     filename : {
         type: String,
-        unique: true,
-        required: false
-    },
-    contentType : {
-        type: String,
-        required: false
-    },
-    imageBase64 : {
-        type: String,
+        unique: false,
         required: false
     },
     votes : {             
