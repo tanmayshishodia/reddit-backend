@@ -15,4 +15,4 @@ const PostStateSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('PostState', PostStateSchema)
+module.exports = mongoose.model('postState', PostStateSchema)

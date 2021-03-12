@@ -5,6 +5,7 @@ const uuid = require('uuid/v4')
 const user = require('../models/User')
 
 const uploadPostModel = require('../models/Post')
+const updateKarma = require('./incrementKarma')
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ID,
@@ -36,23 +37,23 @@ function uploadToS3(params) {
 
 
 //updating Karma
-function updateKarma(id, req) {
-    user.updateOne(
-        {_id: id},
-        {
-            $inc: {
-                karma: +1
-            }
-        },
-        function (err, result) {
-            if (err) throw err;
+// function updateKarma(id, req) {
+//     user.updateOne(
+//         {_id: id},
+//         {
+//             $inc: {
+//                 karma: +1
+//             }
+//         },
+//         function (err, result) {
+//             if (err) throw err;
 
-            if (result) {
-                console.log(`[${id}] post karma increased!`)
-            }
-        }
-    )
-}
+//             if (result) {
+//                 console.log(`[${id}] post karma increased!`)
+//             }
+//         }
+//     )
+// }
 
 
 //Uploading to Mongo
@@ -72,7 +73,7 @@ async function uploadToMongo(req, post, res) {
         const a1 = await newUpload.save()
 
         //calling updateKarma
-        updateKarma("req.session.uid", req)
+        updateKarma("req.session.uid", req, "increment")
 
         res.json(a1)
     } catch (err) {
