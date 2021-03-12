@@ -20,4 +20,6 @@ https://redditclone1.docs.apiary.io/#
 - MongoDB Atlas
 - Google Cloud Console (Google Oauth)
 - Amazon S3
+- Heroku
+- Apiary
 
