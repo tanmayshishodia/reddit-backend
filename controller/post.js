@@ -2,6 +2,7 @@ require('dotenv/config')
 const fs = require('fs')
 const AWS = require('aws-sdk')
 const uuid = require('uuid/v4')
+const user = require('../models/User')
 
 const uploadPostModel = require('../models/Post')
 
@@ -34,8 +35,28 @@ function uploadToS3(params) {
 }
 
 
+//updating Karma
+function updateKarma(id, req) {
+    user.updateOne(
+        {_id: id},
+        {
+            $inc: {
+                karma: +1
+            }
+        },
+        function (err, result) {
+            if (err) throw err;
+
+            if (result) {
+                console.log(`[${id}] post karma increased!`)
+            }
+        }
+    )
+}
+
+
 //Uploading to Mongo
-async function uploadToMongo(post, res) {
+async function uploadToMongo(req, post, res) {
     let voteCount = {
         votes: 0,
     }
@@ -49,6 +70,10 @@ async function uploadToMongo(post, res) {
 
     try {
         const a1 = await newUpload.save()
+
+        //calling updateKarma
+        updateKarma("req.session.uid", req)
+
         res.json(a1)
     } catch (err) {
         console.log(err)
@@ -74,7 +99,7 @@ exports.uploads = async (req, res, next) => {
 
     //TODO: get uid from sessions
     let post = {
-        uid: '1',
+        uid: req.session.uid,
         caption: req.body.caption
     }
 
@@ -123,7 +148,7 @@ exports.uploads = async (req, res, next) => {
 
             post = { ...post, ...imgDesc }
 
-            uploadToMongo(post, res)
+            uploadToMongo(req, post, res)
 
         }).catch(() => {
             console.log("Error in amazon upload")
