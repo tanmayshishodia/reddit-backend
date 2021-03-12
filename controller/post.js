@@ -126,7 +126,7 @@ exports.uploads = async (req, res, next) => {
             uploadToMongo(post, res)
 
         }).catch(() => {
-            console.log("Error")
+            console.log("Error in amazon upload")
         })
 
         // console.log(imgLoc)

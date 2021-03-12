@@ -20,6 +20,22 @@ const UserSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  username: {
+    type: String,
+    //required: true,
+  },
+  dob: {
+    type: String
+    //required: true,
+  },
+  karma: {
+    type: Number,
+    default: 0
+  },
+  badge: {
+    type: Number,
+    default: 0
+  },
   createdAt: {
     type: Date,
     default: Date.now,

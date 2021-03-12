@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 //User POST
-const uploadPostSchema = new mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     uid : {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -45,8 +45,13 @@ const uploadPostSchema = new mongoose.Schema({
     votes : {             
         type: Number,
         required: true,
-    }
+        default: 0
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
   })
   
   //use uploadPostModel to post.
-  module.exports = uploadPostModel = mongoose.model('Post_uploads', uploadPostSchema);
+  module.exports = mongoose.model('Post', PostSchema)
