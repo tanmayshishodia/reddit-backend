@@ -1,14 +1,14 @@
 const fs = require('fs')
 const user = require('../models/User')
-const postState = require('../models/PostState')
+const commentState = require('../models/CommentState')
 
 const updateKarma = require('./incrementKarma')
 const { Interface } = require('readline')
 
-exports.postState = async (req, res, next) => {
+exports.commentState = async (req, res, next) => {
 
     //check if already votes
-    const result = await postState.find({ uid: req.session.uid, postId: req.params.id }, function (err, docs) {
+    const result = await commentState.find({ uid: req.session.uid, commentId: req.params.id }, function (err, docs) {
         if (err) {
             console.log(err);
         }
@@ -18,11 +18,11 @@ exports.postState = async (req, res, next) => {
 
                 post = {
                     uid: req.session.uid,
-                    postId: req.params.id,
+                    commentId: req.params.id,
                     state: 1
                 }
 
-                let newUpload = new postState(post);
+                let newUpload = new commentState(post);
 
                 try {
                     const a1 = await newUpload.save()
@@ -38,29 +38,29 @@ exports.postState = async (req, res, next) => {
 
             } else if (docs.state == 1 && req.body.action == "increment") {
                 //update to make 0
-                postState.updateOne({
+                commentState.updateOne({
                     uid: req.session.uid,
-                    postId: req.params.id
+                    commentId: req.params.id
                 }, {
                     state: 0
                 }, function (err, result) {
                     if (err) throw err;
 
-                    console.log(`[${req.params.id}] post edited!`)
+                    console.log(`[${req.params.id}] comment edited!`)
                     //res.redirect("/")
                     updateKarma(req.session.uid, req, "decrement")
                 })
             } else {
                 //update to make -1
-                postState.updateOne({
+                commentState.updateOne({
                     uid: req.session.uid,
-                    postId: req.params.id
+                    commentId: req.params.id
                 }, {
                     state: -1
                 }, function (err, result) {
                     if (err) throw err;
 
-                    console.log(`[${req.params.id}] post edited!`)
+                    console.log(`[${req.params.id}] comment edited!`)
                     updateKarma(req.session.uid, req, req.body.action)
                     //res.redirect("/")
                 })
