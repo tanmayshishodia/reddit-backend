@@ -27,12 +27,28 @@ router.get(
       res.redirect("/auth/register")
     else {
       console.log("hello")
-    res.redirect("/") //redirect to front page
+      res.redirect("/") //redirect to front page
     }
   }
 )
 
-router.post("/register", function (req, res){
+router.post("/register", function async(req, res) {
+
+  //check if username is unique
+  const result = await post.find({ username: req.body.username }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.send(err)
+    }
+    else {
+      if (Object.keys(docs).length != 0) {
+        res.status(404)
+        res.send("Error: username already exists")
+      }
+    }
+  });
+
+
   User.updateOne({
     _id: req.session.uid
   }, {
