@@ -1,5 +1,6 @@
 let Post = require("../models/Post");
 let Comment = require('../models/Comment')
+let User = require('../models/User')
 
 exports.posts = function (req, res) {
     let sort;
@@ -25,7 +26,7 @@ exports.posts = function (req, res) {
                 votes: -1
             }
     }
-    
+
     Post.find({
         uid: req.session.uid
     }).sort(sort).exec(function (err, doc) {
@@ -65,7 +66,7 @@ exports.comments = function (req, res) {
                 votes: -1
             }
     }
-    
+
     Comment.find({
         uid: req.session.uid
     }).sort(sort).exec(function (err, doc) {
@@ -75,9 +76,24 @@ exports.comments = function (req, res) {
         } else {
             res.status(404);
             res.send({
-                error: `Unable to find posts.`
+                error: `Unable to find Comments.`
             })
         }
     })
 }
 
+exports.profile = function (req, res) {
+    User.find({
+        _id: req.session.uid
+    }).exec(function (err, doc) {
+        if (err) throw err;
+        if (doc.length) {
+            res.send(doc)
+        } else {
+            res.status(404);
+            res.send({
+                error: `Unable to find user.`
+            })
+        }
+    })
+}
