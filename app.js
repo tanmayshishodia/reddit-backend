@@ -9,7 +9,8 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo').default
 const connectDB = require('./config/db')
 const AWS = require('aws-sdk')
-const uuid = require('uuid/v4')
+//const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid');
 
 // Load config
 dotenv.config({ path: './config/config.env' })
