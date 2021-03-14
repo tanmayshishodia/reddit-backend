@@ -1,5 +1,5 @@
 let Post = require('../models/Post')
-
+let User = require('../models/User')
 exports.getAllPosts = function (req, res) {
     let sort;
     action = req.query.action
@@ -19,6 +19,10 @@ exports.getAllPosts = function (req, res) {
                 createdAt: 1
             }
             break;
+        default:
+            sort = {
+                votes: -1
+            }
     }
 
     Post.find({}).sort(sort).exec(function (err, doc) {
@@ -33,4 +37,6 @@ exports.getAllPosts = function (req, res) {
         }
     })
 }
+
+
 
