@@ -1,8 +1,8 @@
-const Post = require('../models/Post')
-exports.getAllPosts = async function (action, req, res) {
-    // let action = "createdAt"
-    // switch(action)
+let Post = require('../models/Post')
 
+exports.getAllPosts = function (req, res) {
+    let sort;
+    action = req.query.action
     switch (action) {
         case "top":
             sort = {
@@ -21,9 +21,8 @@ exports.getAllPosts = async function (action, req, res) {
             break;
     }
 
-    await Post.find({}).sort(sort).exec(function (err, doc) {
+    Post.find({}).sort(sort).exec(function (err, doc) {
         if (err) throw err;
-
         if (doc.length) {
             res.send(doc)
         } else {
@@ -34,3 +33,4 @@ exports.getAllPosts = async function (action, req, res) {
         }
     })
 }
+

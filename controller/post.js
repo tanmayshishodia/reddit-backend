@@ -1,7 +1,8 @@
 require('dotenv/config')
 const fs = require('fs')
 const AWS = require('aws-sdk')
-const uuid = require('uuid/v4')
+//const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid');
 const user = require('../models/User')
 
 const uploadPostModel = require('../models/Post')
