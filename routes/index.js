@@ -15,11 +15,11 @@ router.get('/', ensureGuest, (req, res) => {
   })
 
 
-//@route upload   POST /
+//@route create post   POST /
 router.post('/upload', upload, post.uploads)
 
-//@route comment POST /
-router.post('/postComments', postComment.postComment)
+//@route create comment  POST /
+router.post('/postComments/:id/:pid', postComment.postComment)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)
