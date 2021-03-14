@@ -25,18 +25,6 @@ exports.getAllPosts = function (req, res) {
             }
     }
 
-    // Post.find({}).sort(sort).exec(function (err, doc) {
-    //     if (err) throw err;
-    //     if (doc.length) {
-    //         res.send(doc)
-    //     } else {
-    //         res.status(404);
-    //         res.send({
-    //             error: `Unable to find posts.`
-    //         })
-    //     }
-    // })
-
     Post.aggregate([{
         $lookup: {
             from: "users",

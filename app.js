@@ -48,6 +48,7 @@ app.use('/', require('./routes/index'))
 app.use('/auth', require('./routes/auth'))
 app.use('/feed', require('./routes/api'))
 app.use('/leaderboard', require('./routes/leaderboard'))
+app.use('/profile', require('./routes/profile'))
 
 const PORT = process.env.PORT || 3000
 
