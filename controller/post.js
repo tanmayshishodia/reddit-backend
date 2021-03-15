@@ -5,6 +5,8 @@ const AWS = require('aws-sdk')
 const { v4: uuid } = require('uuid');
 const user = require('../models/User')
 
+const mongoose = require('mongoose')
+
 const uploadPostModel = require('../models/Post')
 const updateKarma = require('./incrementKarma')
 
@@ -63,9 +65,11 @@ async function uploadToMongo(req, post, res) {
         votes: 0,
     }
 
+    console.log("Post5: "+post)
+
     //appending voteCount to post
     post = { ...post, ...voteCount }
-    console.log(post)
+    console.log("Post6: "+post)
 
     //uploading to server
     let newUpload = new uploadPostModel(post);
@@ -103,12 +107,14 @@ exports.uploads = async (req, res, next) => {
     uid = mongoose.Types.ObjectId(uid.substring(1, uid.length - 1));
     console.log(uid)
     console.log(req.body)
-
+    //console.log("Post1: "+post)
     //TODO: get uid from sessions
     let post = {
-        uid: uid,
-        caption: req.body.caption
+        "uid": uid,
+        "caption": req.body.caption
     }
+
+    console.log("Post2: "+{post})
 
     //appending description to post, if post is present in description
     if (req.body.description) {
@@ -118,6 +124,8 @@ exports.uploads = async (req, res, next) => {
 
         post = { ...post, ...postDesc }
     }
+
+    console.log("Post3: "+{post})
 
     //CHANGE: upload in S3 instead of db
     //convert images to base64 encoding and append
@@ -156,6 +164,7 @@ exports.uploads = async (req, res, next) => {
             post = { ...post, ...imgDesc }
 
             uploadToMongo(req, post, res)
+            console.log("Post4: "+post)
 
         }).catch(() => {
             console.log("Error in amazon upload")
