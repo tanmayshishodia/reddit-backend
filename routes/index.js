@@ -5,6 +5,7 @@ const upload = require('../middleware/multer')
 const post = require('../controller/post')
 const postComment = require('../controller/postComment')
 const PostStateTest = require('../test/postStateTest')
+const Login = require('./login')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -23,6 +24,9 @@ router.post('/postComments/:id/:pid', postComment.postComment)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)
+
+//@route create login  POST /
+router.post('/login', Login.login)
 
 // // @desc    Dashboard
 // // @route   GET /dashboard
