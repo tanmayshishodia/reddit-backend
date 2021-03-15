@@ -65,11 +65,11 @@ async function uploadToMongo(req, post, res) {
         votes: 0,
     }
 
-    console.log("Post5: "+post)
+    console.log(post)
 
     //appending voteCount to post
     post = { ...post, ...voteCount }
-    console.log("Post6: "+post)
+    console.log(post)
 
     //uploading to server
     let newUpload = new uploadPostModel(post);
@@ -78,7 +78,7 @@ async function uploadToMongo(req, post, res) {
         const a1 = await newUpload.save()
 
         //calling updateKarma
-        updateKarma("req.session.uid", req, "increment")
+        //updateKarma("req.session.uid", req, "increment")
 
         res.json(a1)
     } catch (err) {
@@ -103,18 +103,19 @@ exports.uploads = async (req, res, next) => {
         return next(error);
     }
 
-    var uid = req.headers.uid
-    uid = mongoose.Types.ObjectId(uid.substring(1, uid.length - 1));
-    console.log(uid)
+    var uid1 = req.headers.uid
+    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+    console.log(uid1)
+    console.log(typeof(uid1))
     console.log(req.body)
     //console.log("Post1: "+post)
     //TODO: get uid from sessions
     let post = {
-        "uid": uid,
-        "caption": req.body.caption
+        uid: uid1,
+        caption: req.body.caption
     }
 
-    console.log("Post2: "+{post})
+    console.log(post)
 
     //appending description to post, if post is present in description
     if (req.body.description) {
@@ -125,7 +126,7 @@ exports.uploads = async (req, res, next) => {
         post = { ...post, ...postDesc }
     }
 
-    console.log("Post3: "+{post})
+    console.log(post)
 
     //CHANGE: upload in S3 instead of db
     //convert images to base64 encoding and append
@@ -164,7 +165,7 @@ exports.uploads = async (req, res, next) => {
             post = { ...post, ...imgDesc }
 
             uploadToMongo(req, post, res)
-            console.log("Post4: "+post)
+            console.log(post)
 
         }).catch(() => {
             console.log("Error in amazon upload")
@@ -200,7 +201,9 @@ exports.uploads = async (req, res, next) => {
 
         })*/
     } else {
-        uploadToMongo(post)
+        console.log("_____________")
+        console.log(post)
+        uploadToMongo(req, post, res)
     }
 
     //initializing voteCounter
