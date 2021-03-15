@@ -1,5 +1,8 @@
 const User = require('../models/User')
 exports.login = async(req, res, next) => {
+    console.log(req.body.profileObj.googleId)
+    // var data = req.body
+    // console.log(data)
     const newUser = {
         googleId: req.body.profileObj.googleId,
         displayName: req.body.profileObj.name,
@@ -8,24 +11,22 @@ exports.login = async(req, res, next) => {
         image: req.body.profileObj.imageUrl,
         email: req.body.profileObj.email
       }
-
+      console.log(newUser)
       try {
-        let user = await User.findOne({ googleId: profile.id })
-
+        let user = await User.findOne({ googleId: req.body.profileObj.googleId })
+        var firstLogin;
+        console.log(user)
         if (user) {
-            login = {
-                login: 1
-            }
-            user = { ...user, ...login }
-          res.send(user)
+          firstLogin = 0;
+          
         } else {
-            login = {
-                login: 0
-            }
-            user = { ...user, ...login }
-          user = await User.create(newUser)
-          res.send(user)
-        }
+            user = await User.create(newUser)
+            firstLogin = 1;
+          }
+
+          data = {user,firstLogin}
+          console.log(data)
+          res.send(data)
       } catch (err) {
         console.error(err)
       }
