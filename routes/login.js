@@ -18,9 +18,11 @@ exports.login = async(req, res, next) => {
         console.log(user)
         if (user) {
           firstLogin = 0;
-          
+          req.session.uid = user._id
         } else {
             user = await User.create(newUser)
+            user = await User.findOne({ googleId: req.body.profileObj.googleId })
+            req.session.uid = user._id
             firstLogin = 1;
           }
 
