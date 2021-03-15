@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const router = express.Router()
+const mongoose = require('mongoose')
 
 let User = require("../models/User");
 // @desc    Auth with Google
@@ -35,29 +36,34 @@ router.get(
 router.post("/register", async(req, res) => {
 
   //check if username is unique
-  const result = await post.find({ username: req.body.username }, async(err, docs) => {
+  const result = await User.find({ username: req.body.username }, async(err, docs) => {
     if (err) {
       console.log(err);
       res.send(err)
     }
     else {
+      console.log("CHECKED USERNAME--------------------")
       if (Object.keys(docs).length != 0) {
         res.status(404)
+        console.log("Error: username already exists--------------------")
         res.send("Error: username already exists")
       }
     }
   });
 
-
+  console.log(req.headers.uid)
+  var uid = req.headers.uid
+  uid = mongoose.Types.ObjectId(uid.substring(1,uid.length-1));
+  console.log(uid+"------------")
   User.updateOne({
-    _id: req.session.uid
+    _id: uid
   }, {
     username: req.body.username,
     dob: req.body.dob
   }, function (err, result) {
     if (err) throw err;
 
-    console.log(`[${req.params.id}] user edited!`)
+    console.log(`[${uid}] user edited!`)
     res.redirect("/")
   })
 })

@@ -17,7 +17,7 @@ let uploadData
 
 //Uploading to S3
 function uploadToS3(params) {
-            
+
     return new Promise((resolve, reject) => {
         return s3.upload(params, (error, data) => {
             if (error) {
@@ -99,16 +99,21 @@ exports.uploads = async (req, res, next) => {
         return next(error);
     }
 
+    var uid = req.headers.uid
+    uid = mongoose.Types.ObjectId(uid.substring(1, uid.length - 1));
+    console.log(uid)
+    console.log(req.body)
+
     //TODO: get uid from sessions
     let post = {
-        uid: req.session.uid,
+        uid: uid,
         caption: req.body.caption
     }
 
     //appending description to post, if post is present in description
-    if (req.body.desc) {
+    if (req.body.description) {
         let postDesc = {
-            desc: req.body.desc
+            desc: req.body.description
         }
 
         post = { ...post, ...postDesc }
