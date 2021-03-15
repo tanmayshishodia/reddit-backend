@@ -40,6 +40,9 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  email: {
+    type: String,
+  }
 })
 //keep a name for this operation
 module.exports = mongoose.model('User', UserSchema)
