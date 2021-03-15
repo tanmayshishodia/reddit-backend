@@ -32,10 +32,10 @@ router.get(
   }
 )
 
-router.post("/register", function async(req, res) {
+router.post("/register", async(req, res) => {
 
   //check if username is unique
-  const result = await post.find({ username: req.body.username }, function (err, docs) {
+  const result = await post.find({ username: req.body.username }, async(err, docs) => {
     if (err) {
       console.log(err);
       res.send(err)
