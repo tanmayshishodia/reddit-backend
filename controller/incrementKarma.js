@@ -1,10 +1,12 @@
-exports.updateKarma = async function(id, req, state) {
+const user = require('../models/User')
+
+exports.updateKarma = async function(id, req, state, karmaPoints) {
     if(state == "increment") {
         user.updateOne(
             {_id: id},
             {
                 $inc: {
-                    karma: +1
+                    karma: +karmaPoints
                 }
             },
             function (err, result) {
@@ -20,7 +22,7 @@ exports.updateKarma = async function(id, req, state) {
             {_id: id},
             {
                 $inc: {
-                    karma: -1
+                    karma: -karmaPoints
                 }
             },
             function (err, result) {

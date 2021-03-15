@@ -6,6 +6,7 @@ const post = require('../controller/post')
 const postComment = require('../controller/postComment')
 const PostStateTest = require('../test/postStateTest')
 const Login = require('./login')
+const votePosts = require('../controller/postState')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -21,6 +22,9 @@ router.post('/upload', upload, post.uploads)
 
 //@route create comment  POST /
 router.post('/postComments/:id/:pid', postComment.postComment)
+
+//
+router.put('/votePosts/:id', votePosts.postState)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)

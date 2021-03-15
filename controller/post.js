@@ -15,6 +15,8 @@ const s3 = new AWS.S3({
     secretAccessKey: process.env.AWS_SECRET
 })
 
+let karmaPoints = 0
+
 let uploadData
 
 //Uploading to S3
@@ -78,7 +80,7 @@ async function uploadToMongo(req, post, res) {
         const a1 = await newUpload.save()
 
         //calling updateKarma
-        //updateKarma("req.session.uid", req, "increment")
+        updateKarma.updateKarma(post.uid, req, "increment", karmaPoints)
 
         res.json(a1)
     } catch (err) {
@@ -115,6 +117,8 @@ exports.uploads = async (req, res, next) => {
         caption: req.body.caption
     }
 
+    karmaPoints = 4
+
     console.log(post)
 
     //appending description to post, if post is present in description
@@ -122,6 +126,8 @@ exports.uploads = async (req, res, next) => {
         let postDesc = {
             desc: req.body.description
         }
+
+        karmaPoints = karmaPoints + 2
 
         post = { ...post, ...postDesc }
     }
@@ -135,6 +141,8 @@ exports.uploads = async (req, res, next) => {
         console.log("file present!")
 
         let imgLoc
+
+        karmaPoints = karmaPoints + 4
 
         let uploadImg = req.file.originalname.split(".")
         const imgExt = uploadImg[uploadImg.length - 1]
