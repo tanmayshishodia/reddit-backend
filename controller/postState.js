@@ -22,7 +22,7 @@ exports.postState = async (req, res, next) => {
 
             //finding id of the post creater
             let creatorId
-            post.findById(req.params.id, function (err, docs) { 
+            post.findById(req.params.id, async(err, docs) => { 
                 if (err){ 
                     console.log(err); 
                     res.send(error)
