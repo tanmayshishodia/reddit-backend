@@ -94,9 +94,21 @@ exports.postState = async (req, res, next) => {
                     //calling updateKarma
 
                     updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
-
-                    res.json(a1)
-                    res.send("upvoted")
+                    post.updateOne({
+                        _id: mongoose.Types.ObjectId(req.params.id)
+                    }, {
+                        $inc: {
+                            votes: voteState
+                        }
+                    }, function (err, result) {
+                        if (err) throw err;
+    
+                        console.log(`[${req.params.id}] post edited!`)
+                        //res.redirect("/")
+                        //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                        res.json(a1)
+                        res.send("upvoted")
+                    })
                 } catch (err) {
                     console.log(err)
                     res.send(err)
@@ -116,7 +128,24 @@ exports.postState = async (req, res, next) => {
                     console.log(`[${req.params.id}] post edited!`)
                     //res.redirect("/")
                     updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
-                    res.send("upvoted")
+                    var increase = -1
+                    if(req.body.actions == "decrement")
+                        increase = 1
+                    post.updateOne({
+                        _id: mongoose.Types.ObjectId(req.params.id)
+                    }, {
+                        $inc: {
+                            votes: increase
+                        }
+                    }, function (err, result) {
+                        if (err) throw err;
+    
+                        console.log(`[${req.params.id}] post edited!`)
+                        //res.redirect("/")
+                        //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                        //res.json(a1)
+                        res.send("upvoted")
+                    })
                 })
             } else if(docs[0].state == 1 && req.body.actions == "decrement" || docs[0].state == -1 && req.body.actions == "increment" || docs[0].state == 0) {
                 console.log("-----DIFF VOTE-----")
@@ -134,11 +163,29 @@ exports.postState = async (req, res, next) => {
                     if (err) throw err;
 
                     console.log(`[${req.params.id}] post edited!`)
-                    if(voteState == 1 && docs[0].state == -1 || voteState == -1 && docs[0].state == 1)
+                    var increment = 1 * voteState
+                    if(voteState == 1 && docs[0].state == -1 || voteState == -1 && docs[0].state == 1) {
                         updateKarma.updateKarma(creatorId, req, req.body.actions, 2)
-                    else
+                        increment = 2 * voteState
+                    } else {
                     updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
-                    res.send("upvoted")
+                    }
+
+                    post.updateOne({
+                        _id: mongoose.Types.ObjectId(req.params.id)
+                    }, {
+                        $inc: {
+                            votes: increment
+                        }
+                    }, function (err, result) {
+                        if (err) throw err;
+    
+                        console.log(`[${req.params.id}] post edited!`)
+                        //res.redirect("/")
+                        //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                        //res.json(a1)
+                        res.send("upvoted")
+                    })
                     //res.redirect("/")
                 })
             }
