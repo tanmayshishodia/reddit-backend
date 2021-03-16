@@ -69,13 +69,4 @@ app.use('/feed', require('./routes/api'))
 app.use('/leaderboard', require('./routes/leaderboard'))
 app.use('/profile', require('./routes/profile'))
 
- const PORT = process.env.PORT || 3000
-
-
-
- const server = app.listen(
-   PORT,
-   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
- )
-
 module.exports = app
