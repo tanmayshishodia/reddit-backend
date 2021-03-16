@@ -67,7 +67,7 @@ exports.postState = async (req, res, next) => {
             console.log("DOCS-----: ", docs)
             console.log("CreatorId: ", creatorId)
             console.log("state: ", docs[0].state)
-            console.log(req.body.actions)
+            console.log("action: ", req.body.actions)
             if (Object.keys(docs).length == 0) {
                 //add 1-0
 
@@ -118,7 +118,7 @@ exports.postState = async (req, res, next) => {
                     updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                     res.send("upvoted")
                 })
-            } else if(docs[0].state == 1 && req.body.actions == "decrement" || docs[0].state == -1 && req.body.actions == "increment") {
+            } else if(docs[0].state == 1 && req.body.actions == "decrement" || docs[0].state == -1 && req.body.actions == "increment" || docs[0].state == 0) {
                 console.log("-----DIFF VOTE-----")
                 //update to make -1
                 let voteState = -1
