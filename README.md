@@ -19,4 +19,6 @@ https://redditclone1.docs.apiary.io/#
 - Apiary
 - Travis CI
 - Coveralls
+- Sentry.io
+- Newrelic
 
