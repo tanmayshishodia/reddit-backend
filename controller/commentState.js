@@ -119,6 +119,7 @@ exports.commentState = async (req, res, next) => {
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                         //
+                        console.log(voteState)
                         res.send("upvoted")
                     })
 
@@ -145,7 +146,7 @@ exports.commentState = async (req, res, next) => {
                     var increase = -1
                     if(req.body.actions == "decrement")
                         increase = 1
-                    Post.updateOne({
+                    Comment.updateOne({
                         _id: mongoose.Types.ObjectId(req.params.id)
                     }, {
                         $inc: {
@@ -158,10 +159,11 @@ exports.commentState = async (req, res, next) => {
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                         //res.json(a1)
+                        console.log(increase)
                         res.send("upvoted")
                     })
                 })
-                res.send("Done")
+                //res.send("Done")
             } else {
                 console.log("-----DIFF VOTE-----")
                 //update to make -1
@@ -199,12 +201,13 @@ exports.commentState = async (req, res, next) => {
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                         //res.json(a1)
+                        console.log(increment)
                         res.send("upvoted")
                     })
                     //updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
                     //res.redirect("/")
                 })
-                res.send("Done")
+                //res.send("Done")
             }
         })
         }
