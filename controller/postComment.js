@@ -4,17 +4,40 @@ const comment = require('../models/Comment')
 const post = require('../models/Post')
 const updateKarma = require('./incrementKarma')
 
-exports.postComment = async(req, res, next) => {
-    const uid = req.session.uid
+
+let creatorId
+function findCreatorId(id) {
+
+    return new Promise((resolve, reject) => {
+        post.findById(id, async (err, docs) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err)
+                reject(err)
+            }
+            else {
+                console.log("Result---- : ", docs);
+                //creatorId = docs.uid
+                //console.log("creatorid------: ", creatorId)
+                creatorId = docs.uid
+                resolve()
+            }
+        });
+    })
+}
+
+exports.postComment = async (req, res, next) => {
+    var uid1 = req.headers.uid
+    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
     const content = req.body.content
     const postId = req.params.id
     const parentId = null
-    if(req.params.pid != null)
+    if (req.params.pid != "null")
         parentId = req.params.pid
     const votes = 0
 
     post = {
-        uid: uid,
+        uid: uid1,
         content: content,
         postId: postId,
         votes: votes,
@@ -26,11 +49,10 @@ exports.postComment = async(req, res, next) => {
 
     try {
         const a1 = await newUpload.save()
-
-        //calling updateKarma
-        updateKarma("req.session.uid", req, "increment")
-
-        res.json(a1)
+        imgLoc = findCreatorId(req.params.id).then(async () => {
+            updateKarma(creatorId, req, "increment", 2)
+            res.send("Done")
+        })
     } catch (err) {
         console.log(err)
         res.send(err)

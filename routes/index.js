@@ -7,6 +7,7 @@ const postComment = require('../controller/postComment')
 const PostStateTest = require('../test/postStateTest')
 const Login = require('./login')
 const votePosts = require('../controller/postState')
+const StateSend = require('../controller/getPostState')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -31,6 +32,8 @@ router.post('/postStateTest', PostStateTest.postStateTest)
 
 //@route create login  POST /
 router.post('/login', Login.login)
+
+router.get('/poststate', StateSend.postState)
 
 // // @desc    Dashboard
 // // @route   GET /dashboard
