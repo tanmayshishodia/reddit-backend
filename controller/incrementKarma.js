@@ -19,7 +19,7 @@ exports.updateKarma = async function(id, req, state, karmaPoints) {
                 }
             }
         )
-    } else {
+    } else if(state == "decrement") {
         console.log(karmaPoints)
         user.updateOne(
             {_id: id},
