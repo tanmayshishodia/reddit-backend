@@ -24,7 +24,7 @@ router.post('/upload', upload, post.uploads)
 router.post('/postComments/:id/:pid', postComment.postComment)
 
 //
-router.put('/votePosts/:id', votePosts.postState)
+router.post('/votePosts/:id', votePosts.postState)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)
