@@ -2,15 +2,15 @@
   "name": "reddit-backend",
   "version": "1.0.0",
   "description": "open online forum",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "test": "jest --forceExit",
+    "test": "jest --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info",
     "test:staged": "jest --findRelatedTests",
-    "start": "node app.js",
-    "dev": "cross-env NODE_ENV=development nodemon app.js"
+    "start": "node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
   },
   "repository": {
     "type": "git",

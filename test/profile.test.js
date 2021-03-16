@@ -5,29 +5,17 @@ const testUser = require('../testModels/testUser')
 // we will use supertest to test HTTP requests/responses
 const request = require("supertest");
 // we also need our app for the correct routes!
-const app = require("../app");
-const mongoose = require('mongoose')
+const app= require("../app");
+const mongoose = require('mongoose');
 
 dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
-let server, agent;
-
-beforeEach((done) => {
-    server = app.listen(4000, (err) => {
-      if (err) return done(err);
-
-       agent = request.agent(server); // since the application is already listening, it should use the allocated port
-       done();
-    });
+afterAll(async () => {
+  await mongoose.connection.close()
+	await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
 });
-
-afterEach((done) => {
-  mongoose.connection.close()
-  return  server && server.close(done);
-});
-
 // testUser.create({
 //     "karma": 1,
 //     "badge": 0,
