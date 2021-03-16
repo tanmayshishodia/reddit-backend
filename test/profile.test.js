@@ -1,18 +1,17 @@
 require('dotenv/config')
 const dotenv = require('dotenv')
 const connectDB = require('../config/db')
-const testUser = require('../testModels/testUser')
 // we will use supertest to test HTTP requests/responses
 const request = require("supertest");
 // we also need our app for the correct routes!
-const app = require("../app");
-const mongoose = require('mongoose');
-const http = require('http');
-const express = require('express')
+const app= require("../app");
 dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
+afterAll(async () => {
+  await mongoose.connection.close();
+});
 
 describe("GET /profile", () => {
   test("It responds with profile data in json format", async (done) => {

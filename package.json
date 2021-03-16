@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --forceExit --detectOpenHandles",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --forceExit",
     "test:coverage": "jest --coverage --forceExit --detectOpenHandles",
-    "test:coveralls": "jest --coverage && coveralls < coverage/lcov.info",
+    "test:coveralls": "jest --coverage --forceExit --detectOpenHandles && coveralls < coverage/lcov.info",
     "test:staged": "jest --findRelatedTests",
     "start": "node server.js",
     "dev": "cross-env NODE_ENV=development nodemon server.js"
