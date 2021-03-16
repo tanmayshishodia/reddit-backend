@@ -8,11 +8,6 @@ const app= require("../app");
 dotenv.config({ path: './config/config.env' })
 
 connectDB()
-
-afterAll(async () => {
-  await mongoose.connection.close();
-});
-
 describe("GET /profile", () => {
   test("It responds with profile data in json format", async (done) => {
     const response = await request(app).get("/profile").set('uid', '6045fd1e46373130ec9d2431');
