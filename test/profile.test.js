@@ -12,15 +12,21 @@ dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
-beforeAll(done => {
-  done()
-})
+let server, agent;
 
-afterAll(done => {
-  // Closing the DB connection allows Jest to exit successfully.
+beforeEach((done) => {
+    server = app.listen(4000, (err) => {
+      if (err) return done(err);
+
+       agent = request.agent(server); // since the application is already listening, it should use the allocated port
+       done();
+    });
+});
+
+afterEach((done) => {
   mongoose.connection.close()
-  done()
-})
+  return  server && server.close(done);
+});
 
 // testUser.create({
 //     "karma": 1,
@@ -54,3 +60,5 @@ describe("GET /profile", () => {
     done()
   });
 });
+
+
