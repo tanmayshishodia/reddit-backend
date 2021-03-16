@@ -28,25 +28,25 @@ function findCreatorId(id) {
     })
 }
 
-function findCreatorId(id) {
+// function findCreatorId(id) {
 
-    return new Promise((resolve, reject) => {
-        Comment.findById(id, async (err, docs) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send(err)
-                reject(err)
-            }
-            else {
-                console.log("Result---- : ", docs);
-                //creatorId = docs.uid
-                //console.log("creatorid------: ", creatorId)
-                creatorId = docs.uid
-                resolve()
-            }
-        });
-    })
-}
+//     return new Promise((resolve, reject) => {
+//         Comment.findById(id, async (err, docs) => {
+//             if (err) {
+//                 console.log(err);
+//                 res.status(500).send(err)
+//                 reject(err)
+//             }
+//             else {
+//                 console.log("Result---- : ", docs);
+//                 //creatorId = docs.uid
+//                 //console.log("creatorid------: ", creatorId)
+//                 creatorId = docs.uid
+//                 resolve()
+//             }
+//         });
+//     })
+// }
 
 exports.postComment = async (req, res, next) => {
     var uid1 = req.headers.uid
