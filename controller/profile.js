@@ -28,15 +28,15 @@ exports.posts = function (req, res) {
     }
 
     Post.find({
-        uid: req.session.uid
+        uid: req.headers.uid
     }).sort(sort).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {
             res.send(doc)
         } else {
-            res.status(404);
+            res.status(403);
             res.send({
-                error: `Unable to find posts.`
+                error: `Unauthorised user`
             })
         }
     })
@@ -68,7 +68,7 @@ exports.comments = function (req, res) {
     }
 
     Comment.find({
-        uid: req.session.uid
+        uid: req.headers.uid
     }).sort(sort).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {
@@ -84,7 +84,7 @@ exports.comments = function (req, res) {
 
 exports.profile = function (req, res) {
     User.find({
-        _id: req.session.uid
+        _id: req.headers.uid
     }).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {
