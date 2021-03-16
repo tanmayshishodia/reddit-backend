@@ -118,7 +118,7 @@ exports.postState = async (req, res, next) => {
                     updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                     res.send("upvoted")
                 })
-            } else {
+            } else if(docs[0].state == 1 && req.body.actions == "decrement" || docs[0].state == -1 && req.body.actions == "increment") {
                 console.log("-----DIFF VOTE-----")
                 //update to make -1
                 let voteState = -1
