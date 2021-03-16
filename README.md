@@ -23,5 +23,3 @@ https://redditclone1.docs.apiary.io/#
 - Travis CI
 - Coveralls
 - Sentry.io
-- Newrelic
-
