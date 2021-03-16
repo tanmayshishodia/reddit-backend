@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/tanmayshishodia/reddit-backend#readme",
   "dependencies": {
+    "@sentry/node": "^6.2.2",
+    "@sentry/tracing": "^6.2.2",
     "aws-sdk": "^2.861.0",
     "connect-mongo": "^4.3.0",
     "cors": "^2.8.5",

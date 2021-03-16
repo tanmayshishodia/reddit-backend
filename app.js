@@ -13,6 +13,13 @@ const cors = require('cors')
 //const uuid = require('uuid/v4')
 const { v4: uuid } = require('uuid');
 
+const Sentry = require("@sentry/node");
+// or use es6 import statements
+// import * as Sentry from '@sentry/node';
+
+const Tracing = require("@sentry/tracing");
+// or use es6 import statements
+// import * as Tracing from '@sentry/tracing';
 // Load config
 dotenv.config({ path: './config/config.env' })
 
@@ -22,6 +29,34 @@ require('./config/passport')(passport)
 connectDB()
 
 const app = express()
+
+
+Sentry.init({
+  dsn: "https://df194f4b5e9d46fdae059dc4f37ef1c5@o552997.ingest.sentry.io/5679612",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+const transaction = Sentry.startTransaction({
+  op: "test",
+  name: "My First Test Transaction",
+});
+
+setTimeout(() => {
+  try {
+    foo();
+  } catch (e) {
+    Sentry.captureException(e);
+  } finally {
+    transaction.finish();
+  }
+}, 99);
+
+
+
 
 
 //Newly added -----------------------
@@ -68,5 +103,7 @@ app.use('/auth', require('./routes/auth'))
 app.use('/feed', require('./routes/api'))
 app.use('/leaderboard', require('./routes/leaderboard'))
 app.use('/profile', require('./routes/profile'))
+
+
 
 module.exports = app
