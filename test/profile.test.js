@@ -7,30 +7,42 @@ const request = require("supertest");
 // we also need our app for the correct routes!
 const app= require("../app");
 const mongoose = require('mongoose');
-
+const http = require('http');
+const express = require('express')
 dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
-afterAll(async () => {
-  await mongoose.connection.close()
-	await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
-});
-// testUser.create({
-//     "karma": 1,
-//     "badge": 0,
-//     "googleId": "114770881457064547165",
-//     "displayName": "Tanmay Shishodia",
-//     "firstName": "Tanmay",
-//     "lastName": "Shishodia",
-//     "image": "https://lh3.googleusercontent.com/a-/AOh14Ggsfm1pYK29xl1ntXqY_EppftSoR3y_jib1VjRvYXM=s96-c",
-//     "createdAt": "2021-03-08T10:31:58.745Z",
-//     "__v": 0,
-//     "dob": "1998-12-15",
-//     "username": "tanmayshishodia"
-//   })
 
 describe("GET /profile", () => {
+
+  // let server;
+
+  // beforeAll(done => {
+  //   server = http.createServer((req, res) => {
+  //     res.write('ok');
+  //     res.end();
+  //   });
+  //   server.listen(done);
+  // });
+
+  // afterAll(done => {
+  //   server.close(done);
+  //   mongoose.disconnect(done)
+  // });
+  let appp, server;
+
+    beforeAll(done => {
+        app1 = new express();
+        server = http.createServer(app1);
+        server.listen(done);
+    });
+
+    afterAll(done => {
+        mongoose.disconnect()
+        server.close(done);
+    });
+
   test("It responds with profile data in json format", async (done) => {
     const response = await request(app).get("/profile").set('uid', '6045fd1e46373130ec9d2431');
     expect(response.body.length).toBe(1);
