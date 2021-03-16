@@ -8,6 +8,7 @@ const PostStateTest = require('../test/postStateTest')
 const Login = require('./login')
 const votePosts = require('../controller/postState')
 const StateSend = require('../controller/getPostState')
+const voteComments = require('../controller/commentState')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -26,6 +27,9 @@ router.post('/postComments/:id/:pid', postComment.postComment)
 
 //
 router.post('/votePosts/:id', votePosts.postState)
+
+//
+router.post('/votecomments/:id/:pid', voteComments.commentState)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)

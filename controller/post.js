@@ -151,7 +151,9 @@ exports.uploads = async (req, res, next) => {
         const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
             Key: `${uuid()}.${imgExt}`,
-            Body: req.file.buffer
+            Body: req.file.buffer,
+            ContentType: req.file.mimetype,
+            ACL: 'public-read'
         }
 
         console.log(params)

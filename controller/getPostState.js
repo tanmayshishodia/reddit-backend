@@ -20,10 +20,6 @@ exports.postState = async(req, res, next) => {
             res.send(docs)
         } 
     });
-    console.log("Hi")
-    //result.forEach(function(doc, err) {
-        console.log("Hello")
-        console.log(doc)
     //})
     console.log("Bye")
 }

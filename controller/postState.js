@@ -1,7 +1,7 @@
 const fs = require('fs')
 const user = require('../models/User')
 const postState = require('../models/PostState')
-const post = require('../models/Post')
+const Post = require('../models/Post')
 const mongoose = require('mongoose')
 
 const updateKarma = require('./incrementKarma')
@@ -14,7 +14,7 @@ let creatorId
 function findCreatorId(id) {
 
     return new Promise((resolve, reject) => {
-        post.findById(id, async(err, docs) => { 
+        Post.findById(id, async(err, docs) => { 
             if (err){ 
                 console.log(err);
                 res.status(500).send(err)
@@ -66,7 +66,7 @@ exports.postState = async (req, res, next) => {
 
             console.log("DOCS-----: ", docs)
             console.log("CreatorId: ", creatorId)
-            console.log("state: ", docs[0].state)
+            //console.log("state: ", docs[0].state)
             console.log("action: ", req.body.actions)
             if (Object.keys(docs).length == 0) {
                 //add 1-0
@@ -78,7 +78,7 @@ exports.postState = async (req, res, next) => {
                     console.log("-------Changed-------")
                 }
 
-                post = {
+                let post = {
                     uid: uid1,
                     postId: req.params.id,
                     state: voteState
@@ -94,7 +94,7 @@ exports.postState = async (req, res, next) => {
                     //calling updateKarma
 
                     updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
-                    post.updateOne({
+                    Post.updateOne({
                         _id: mongoose.Types.ObjectId(req.params.id)
                     }, {
                         $inc: {
@@ -106,7 +106,7 @@ exports.postState = async (req, res, next) => {
                         console.log(`[${req.params.id}] post edited!`)
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
-                        res.json(a1)
+                        //
                         res.send("upvoted")
                     })
                 } catch (err) {
@@ -131,7 +131,7 @@ exports.postState = async (req, res, next) => {
                     var increase = -1
                     if(req.body.actions == "decrement")
                         increase = 1
-                    post.updateOne({
+                    Post.updateOne({
                         _id: mongoose.Types.ObjectId(req.params.id)
                     }, {
                         $inc: {
@@ -171,7 +171,7 @@ exports.postState = async (req, res, next) => {
                     updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
                     }
 
-                    post.updateOne({
+                    Post.updateOne({
                         _id: mongoose.Types.ObjectId(req.params.id)
                     }, {
                         $inc: {

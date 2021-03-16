@@ -1,12 +1,34 @@
 const fs = require('fs')
 const user = require('../models/User')
 const CommentState = require('../models/CommentState')
-const post = require('../models/Post')
+const Comment = require('../models/Comment')
+const Post = require('../models/Post')
 const mongoose = require('mongoose')
 
 const updateKarma = require('./incrementKarma')
 const { Interface } = require('readline')
 const { error } = require('console')
+
+let creatorId
+function findCreatorId(id) {
+
+    return new Promise((resolve, reject) => {
+        Comment.findById(id, async (err, docs) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err)
+                reject(err)
+            }
+            else {
+                console.log("Result---- : ", docs);
+                //creatorId = docs.uid
+                //console.log("creatorid------: ", creatorId)
+                creatorId = docs.uid
+                resolve()
+            }
+        });
+    })
+}
 
 exports.commentState = async (req, res, next) => {
 
@@ -15,42 +37,60 @@ exports.commentState = async (req, res, next) => {
     console.log(req.headers.uid)
     var uid1 = req.headers.uid
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-    const result = await CommentState.find({ uid: uid1, postId: req.params.id }, async (err, docs) => {
+
+    const result = await CommentState.find({ uid: uid1, commentId: req.params.id }, async (err, docs) => {
         if (err) {
             console.log(err);
         } else {
 
+            imgLoc = findCreatorId(req.params.id).then(async () => {
+                //updateKarma.updateKarma(creatorId, req, "increment", 2)
+                //res.send("Done")
+            
             //finding id of the post creater
-            let creatorId
-            post.findById(req.params.id, function (err, docs) { 
-                if (err){ 
-                    console.log(err); 
-                    res.send(error)
-                } 
-                else{ 
-                    console.log("Result : ", docs); 
-                    creatorId = docs.uid
-                    console.log("##########!@@@@@@@@@@@@@@@@@!**************")
-                    console.log(creatorId)
-                } 
-            });
+            // let postId, creatorId
+            // console.log("CommentId; ",req.params.id)
+            // Comment.findById(req.params.id, function (err, docs) { 
+            //     if (err){ 
+            //         console.log(err); 
+            //         res.send(error)
+            //     } 
+            //     else{ 
+            //         console.log("Result : ", docs); 
+            //         postId = docs.postId
+            //         console.log("##########!@@@@@@@@@@@@@@@@@!**************")
+            //         console.log(postId)
+            //     } 
+            // });
+            // Post.findById(postId, function (err, docs) { 
+            //     if (err){ 
+            //         console.log(err); 
+            //         res.send(error)
+            //     } 
+            //     else{ 
+            //         console.log("Result : ", docs); 
+            //         creatorId = docs.uid
+            //         console.log("##########!@@@@@@@@@@@@@@@@@!**************")
+            //         console.log(creatorId)
+            //     } 
+            // });
 
             console.log(docs)
-            console.log(docs[0].state)
-            console.log(req.body.action)
+            //console.log(docs[0].state)
+            console.log("action: ", req.body.actions)
             if (Object.keys(docs).length == 0) {
                 //add 1-0
 
                 let voteState = -1
                 console.log("Decrement")
-                if(req.body.action == "increment") {
+                if(req.body.actions == "increment") {
                     voteState = 1
                     console.log("-------Changed-------")
                 }
 
                 post = {
                     uid: uid1,
-                    postId: req.params.id,
+                    commentId: req.params.id,
                     state: voteState
                 }
 
@@ -63,8 +103,24 @@ exports.commentState = async (req, res, next) => {
                     const a1 = await newUpload.save()
 
                     //calling updateKarma
+                    
 
-                    updateKarma.updateKarma(creatorId, req, req.body.action, 1)
+                    updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
+                    Comment.updateOne({
+                        _id: mongoose.Types.ObjectId(req.params.id)
+                    }, {
+                        $inc: {
+                            votes: voteState
+                        }
+                    }, function (err, result) {
+                        if (err) throw err;
+    
+                        console.log(`[${req.params.id}] post edited!`)
+                        //res.redirect("/")
+                        //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                        //
+                        res.send("upvoted")
+                    })
 
                     res.json(a1)
                 } catch (err) {
@@ -72,12 +128,12 @@ exports.commentState = async (req, res, next) => {
                     res.send(err)
                 }
 
-            } else if (docs[0].state == 1 && req.body.action == "increment" || docs[0].state == -1 && req.body.action == "decrement") {
+            } else if (docs[0].state == 1 && req.body.actions == "increment" || docs[0].state == -1 && req.body.actions == "decrement") {
                 console.log("----SAME VOTE----")
                 //update to make 0
                 CommentState.updateOne({
                     uid: uid1,
-                    postId: req.params.id
+                    commentId: req.params.id
                 }, {
                     state: 0
                 }, function (err, result) {
@@ -85,28 +141,72 @@ exports.commentState = async (req, res, next) => {
 
                     console.log(`[${req.params.id}] post edited!`)
                     //res.redirect("/")
-                    updateKarma.updateKarma(creatorId, req, req.body.action, -1)
+                    updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                    var increase = -1
+                    if(req.body.actions == "decrement")
+                        increase = 1
+                    Post.updateOne({
+                        _id: mongoose.Types.ObjectId(req.params.id)
+                    }, {
+                        $inc: {
+                            votes: increase
+                        }
+                    }, function (err, result) {
+                        if (err) throw err;
+    
+                        console.log(`[${req.params.id}] post edited!`)
+                        //res.redirect("/")
+                        //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                        //res.json(a1)
+                        res.send("upvoted")
+                    })
                 })
+                res.send("Done")
             } else {
                 console.log("-----DIFF VOTE-----")
                 //update to make -1
                 let voteState = -1
-                if(req.body.action == "increment")
+                if(req.body.actions == "increment")
                     voteState = 1
 
                 CommentState.updateOne({
                     uid: uid1,
-                    postId: req.params.id
+                    commentId: req.params.id
                 }, {
                     state: voteState
                 }, function (err, result) {
                     if (err) throw err;
 
                     console.log(`[${req.params.id}] post edited!`)
-                    updateKarma.updateKarma(creatorId, req, req.body.action, 1)
+                    var increment = 1 * voteState
+                    if(voteState == 1 && docs[0].state == -1 || voteState == -1 && docs[0].state == 1) {
+                        updateKarma.updateKarma(creatorId, req, req.body.actions, 2)
+                        increment = 2 * voteState
+                    } else {
+                    updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
+                    }
+
+                    Comment.updateOne({
+                        _id: mongoose.Types.ObjectId(req.params.id)
+                    }, {
+                        $inc: {
+                            votes: increment
+                        }
+                    }, function (err, result) {
+                        if (err) throw err;
+    
+                        console.log(`[${req.params.id}] post edited!`)
+                        //res.redirect("/")
+                        //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
+                        //res.json(a1)
+                        res.send("upvoted")
+                    })
+                    //updateKarma.updateKarma(creatorId, req, req.body.actions, 1)
                     //res.redirect("/")
                 })
+                res.send("Done")
             }
+        })
         }
     })
 }

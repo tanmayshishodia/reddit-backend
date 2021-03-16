@@ -1,15 +1,16 @@
 const fs = require('fs')
 const user = require('../models/User')
 const comment = require('../models/Comment')
-const post = require('../models/Post')
+const Post = require('../models/Post')
 const updateKarma = require('./incrementKarma')
+const mongoose = require('mongoose')
 
 
 let creatorId
 function findCreatorId(id) {
 
     return new Promise((resolve, reject) => {
-        post.findById(id, async (err, docs) => {
+        Post.findById(id, async (err, docs) => {
             if (err) {
                 console.log(err);
                 res.status(500).send(err)
@@ -31,7 +32,7 @@ exports.postComment = async (req, res, next) => {
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
     const content = req.body.content
     const postId = req.params.id
-    const parentId = null
+    let parentId = null
     if (req.params.pid != "null")
         parentId = req.params.pid
     const votes = 0
@@ -48,9 +49,9 @@ exports.postComment = async (req, res, next) => {
     let commentUpload = new comment(post);
 
     try {
-        const a1 = await newUpload.save()
+        const a1 = await commentUpload.save()
         imgLoc = findCreatorId(req.params.id).then(async () => {
-            updateKarma(creatorId, req, "increment", 2)
+            updateKarma.updateKarma(creatorId, req, "increment", 2)
             res.send("Done")
         })
     } catch (err) {
