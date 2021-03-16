@@ -25,14 +25,12 @@ exports.getAllComments = function (req, res) {
             }
     }
 
-    Comment.aggregate([{
-        $lookup: {
-            from: "users",
-            localField: "uid",
-            foreignField: "_id",
-            as: "test"
-        }
-    }]).sort(sort).exec(function (err, doc) {
+    //var uid1 = req.headers.uid
+    //uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+
+    Comment.find({ postId: req.params.id }).populate({
+        path: 'uid'
+    }).sort(sort).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {
             res.send(doc)
@@ -42,6 +40,25 @@ exports.getAllComments = function (req, res) {
                 error: `Unable to find posts.`
             })
         }
+
+        /*Comment.aggregate([{
+            $lookup: {
+                from: "users",
+                localField: "uid",
+                foreignField: "_id",
+                as: "test"
+            }
+        }]).sort(sort).exec(function (err, doc) {
+            if (err) throw err;
+            if (doc.length) {
+                res.send(doc)
+            } else {
+                res.status(404);
+                res.send({
+                    error: `Unable to find posts.`
+                })
+            }
+        })*/
     })
 }
 

@@ -35,6 +35,11 @@ exports.getAllPosts = function (req, res) {
     }]).sort(sort).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {
+            var i = 0
+            doc.forEach(element => {
+                i++
+                console.log("h ", element)
+            })
             res.send(doc)
         } else {
             res.status(404);
