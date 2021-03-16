@@ -10,6 +10,7 @@ const votePosts = require('../controller/postState')
 const StateSend = require('../controller/getPostState')
 const voteComments = require('../controller/commentState')
 const getComments = require('../controller/getComments')
+const getReply = require('../controller/getReply')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -41,6 +42,8 @@ router.post('/login', Login.login)
 router.get('/poststate', StateSend.postState)
 
 router.get('/comments/:id', getComments.getAllComments)
+
+router.get('/reply/:id', getReply.getAllReplies)
 
 // // @desc    Dashboard
 // // @route   GET /dashboard

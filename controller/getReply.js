@@ -1,6 +1,6 @@
 let Comment = require('../models/Comment')
 let User = require('../models/User')
-exports.getAllComments = function (req, res) {
+exports.getAllReplies = function (req, res) {
     let sort;
     action = req.query.action
     switch (action) {
@@ -28,7 +28,7 @@ exports.getAllComments = function (req, res) {
     //var uid1 = req.headers.uid
     //uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
 
-    Comment.find({ postId: req.params.id, parentId: null }).populate({
+    Comment.find({ parentId: req.params.id }).populate({
         path: 'uid'
     }).sort(sort).exec(function (err, doc) {
         if (err) throw err;

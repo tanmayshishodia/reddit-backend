@@ -4,7 +4,9 @@ const postState = require('../models/PostState')
 const post = require('../models/Post')
 
 exports.postStateTest = async(req, res, next) => {
-        const result = await post.find({ uid: '1', caption: 'Hi'}, function (err, docs) { 
+    var uid1 = req.headers.uid
+    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+        const result = await post.find({ uid: uid1}, function (err, docs) { 
         if (err){ 
             console.log(err); 
         } 
@@ -16,7 +18,7 @@ exports.postStateTest = async(req, res, next) => {
             })
         } 
     });
-    console.log("Hi")
+    console.log(result)
     //result.forEach(function(doc, err) {
         console.log("Hello")
         console.log(doc)
