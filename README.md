@@ -17,4 +17,6 @@ https://redditclone1.docs.apiary.io/#
 - Amazon S3
 - Heroku
 - Apiary
+- Travis CI
+- Coveralls
 
