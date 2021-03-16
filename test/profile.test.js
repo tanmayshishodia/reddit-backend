@@ -15,34 +15,6 @@ connectDB()
 
 
 describe("GET /profile", () => {
-
-  // let server;
-
-  // beforeAll(done => {
-  //   server = http.createServer((req, res) => {
-  //     res.write('ok');
-  //     res.end();
-  //   });
-  //   server.listen(done);
-  // });
-
-  // afterAll(done => {
-  //   server.close(done);
-  //   mongoose.disconnect(done)
-  // });
-  let appp, server;
-
-    beforeAll(done => {
-        app1 = new express();
-        server = http.createServer(app1);
-        server.listen(done);
-    });
-
-    afterAll(done => {
-        mongoose.disconnect()
-        server.close(done);
-    });
-
   test("It responds with profile data in json format", async (done) => {
     const response = await request(app).get("/profile").set('uid', '6045fd1e46373130ec9d2431');
     expect(response.body.length).toBe(1);
