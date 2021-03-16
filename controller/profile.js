@@ -1,6 +1,7 @@
 let Post = require("../models/Post");
 let Comment = require('../models/Comment')
 let User = require('../models/User')
+const Sentry = require("@sentry/node");
 
 exports.posts = function (req, res) {
     let sort;
@@ -30,7 +31,8 @@ exports.posts = function (req, res) {
     Post.find({
         uid: req.headers.uid
     }).sort(sort).exec(function (err, doc) {
-        if (err) throw err;
+        if (err) 
+            throw err;
         if (doc.length) {
             res.send(doc)
         } else {
