@@ -11,7 +11,9 @@ const connectDB = require('./config/db')
 const AWS = require('aws-sdk')
 const cors = require('cors')
 //const uuid = require('uuid/v4')
-const { v4: uuid } = require('uuid');
+const {
+  v4: uuid
+} = require('uuid');
 
 const Sentry = require("@sentry/node");
 // or use es6 import statements
@@ -21,40 +23,37 @@ const Tracing = require("@sentry/tracing");
 // or use es6 import statements
 // import * as Tracing from '@sentry/tracing';
 // Load config
-dotenv.config({ path: './config/config.env' })
+dotenv.config({
+  path: './config/config.env'
+})
 
 // Passport config
 require('./config/passport')(passport)
 
 connectDB()
 
+
+
+
 const app = express()
 
 
 Sentry.init({
   dsn: "https://df194f4b5e9d46fdae059dc4f37ef1c5@o552997.ingest.sentry.io/5679612",
-
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({
+      tracing: true
+    }),
+    new Tracing.Integrations.Mongo()
+  ],
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
 });
-
-const transaction = Sentry.startTransaction({
-  op: "test",
-  name: "My First Test Transaction",
-});
-
-setTimeout(() => {
-  try {
-    //foo();
-  } catch (e) {
-    Sentry.captureException(e);
-  } finally {
-    transaction.finish();
-  }
-}, 99);
-
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
 
 
 
@@ -88,7 +87,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     //store: MongoStore.create({ mongooseConnection: mongoose.connection }),
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI
+    }),
   })
 )
 
@@ -104,6 +105,14 @@ app.use('/feed', require('./routes/api'))
 app.use('/leaderboard', require('./routes/leaderboard'))
 app.use('/profile', require('./routes/profile'))
 
+
+app.use(Sentry.Handlers.errorHandler());
+app.use(function onError(err, req, res, next) {
+  // The error id is attached to `res.sentry` to be returned
+  // and optionally displayed to the user for support.
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
+});
 
 
 module.exports = app
