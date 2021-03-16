@@ -5,7 +5,7 @@ const testUser = require('../testModels/testUser')
 // we will use supertest to test HTTP requests/responses
 const request = require("supertest");
 // we also need our app for the correct routes!
-const app= require("../app");
+const app = require("../app");
 const mongoose = require('mongoose');
 const http = require('http');
 const express = require('express')
