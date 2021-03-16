@@ -4,6 +4,7 @@ const comment = require('../models/Comment')
 const Post = require('../models/Post')
 const updateKarma = require('./incrementKarma')
 const mongoose = require('mongoose')
+const Comment = require('../models/Comment')
 
 
 let creatorId
@@ -11,6 +12,26 @@ function findCreatorId(id) {
 
     return new Promise((resolve, reject) => {
         Post.findById(id, async (err, docs) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err)
+                reject(err)
+            }
+            else {
+                console.log("Result---- : ", docs);
+                //creatorId = docs.uid
+                //console.log("creatorid------: ", creatorId)
+                creatorId = docs.uid
+                resolve()
+            }
+        });
+    })
+}
+
+function findCreatorId(id) {
+
+    return new Promise((resolve, reject) => {
+        Comment.findById(id, async (err, docs) => {
             if (err) {
                 console.log(err);
                 res.status(500).send(err)
@@ -52,6 +73,12 @@ exports.postComment = async (req, res, next) => {
         const a1 = await commentUpload.save()
         imgLoc = findCreatorId(req.params.id).then(async () => {
             updateKarma.updateKarma(creatorId, req, "increment", 2)
+            if(req.params.pid != "null") {
+                imgLoc = findCreatorId(req.params.pid).then(async () => {
+                    updateKarma.updateKarma(creatorId, req, "increment", 1)
+                    res.send("Done")
+                })
+            } else
             res.send("Done")
         })
     } catch (err) {
