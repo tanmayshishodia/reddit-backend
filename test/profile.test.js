@@ -6,13 +6,27 @@ const testUser = require('../testModels/testUser')
 const request = require("supertest");
 // we also need our app for the correct routes!
 const app = require("../app");
- 
+const mongoose = require('mongoose')
 
 dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
+let server, agent;
 
+beforeEach((done) => {
+    server = app.listen(4000, (err) => {
+      if (err) return done(err);
+
+       agent = request.agent(server); // since the application is already listening, it should use the allocated port
+       done();
+    });
+});
+
+afterEach((done) => {
+  mongoose.connection.close()
+  return  server && server.close(done);
+});
 
 // testUser.create({
 //     "karma": 1,
@@ -29,7 +43,7 @@ connectDB()
 //   })
 
 describe("GET /profile", () => {
-  test("It responds with profile data in json format", async () => {
+  test("It responds with profile data in json format", async (done) => {
     const response = await request(app).get("/profile").set('uid', '6045fd1e46373130ec9d2431');
     expect(response.body.length).toBe(1);
     expect(response.body[0]).toHaveProperty("googleId");
@@ -43,5 +57,8 @@ describe("GET /profile", () => {
     expect(response.body[0]).toHaveProperty("karma");
     expect(response.body[0]).toHaveProperty("badge");
     expect(response.statusCode).toBe(200);
+    done()
   });
 });
+
+
