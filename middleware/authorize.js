@@ -8,7 +8,7 @@ module.exports = () => {
         var uid1 = req.headers['uid']
         if(uid1 == "null" || !uid1 || uid1 == "\"\"" || uid1 == undefined || uid1 == null || uid1.length <10) {
             console.log("First line of defence")
-            return res.status(401).send("err")
+            return res.status(401).send("unauthorized Access")
         } else {
             try {
                 console.log("try")
