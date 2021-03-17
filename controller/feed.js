@@ -6,20 +6,20 @@ const mongoose = require('mongoose')
 let creatorId
 function findCreatorId(id) {
 
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
-        const result = await PostState.find({ uid: id}, function (err, docs) { 
-            if (err){ 
+        const result = await PostState.find({ uid: id }, function (err, docs) {
+            if (err) {
                 console.log(err);
                 res.status(500).send(err)
                 reject(err)
-            } 
-            else{ 
-                console.log("Result---- : ", docs); 
+            }
+            else {
+                console.log("Result---- : ", docs);
                 creatorId = docs
                 console.log("docs: ", docs)
                 resolve()
-            } 
+            }
         });
     })
 }
@@ -52,9 +52,9 @@ exports.getAllPosts = function (req, res) {
 
     var uid1 = req.headers.uid
     console.log("UID:---------> ", uid1)
-    if(uid1 == undefined)
+    if (uid1 == undefined)
         console.log("UNDEFINED")
-    if(uid1 == "\"\"" || uid1 == undefined) {
+    if (uid1 == "\"\"" || uid1 == undefined) {
         console.log("\n\n\nyayeyeyebeebbeveubveuue_)))))))))))))))))000000000000\n\n")
         Post.aggregate([{
             $lookup: {
@@ -67,7 +67,7 @@ exports.getAllPosts = function (req, res) {
             if (err) throw err;
             if (doc.length) {
                 console.log(doc)
-                console.log(typeof(doc))
+                console.log(typeof (doc))
                 res.send(doc)
             } else {
                 res.status(404);
@@ -77,18 +77,52 @@ exports.getAllPosts = function (req, res) {
             }
         })
     } else {
-    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-    console.log("uid: ", uid1)
-    imgLoc = findCreatorId(uid1).then(async() => {
-        console.log("--------", creatorId, "----------")
-        let map = {}
-        creatorId.forEach(element => {
-            map[element.postId] = element.state
-            //console.log("key: ", element.postId, "value: ", element.state)
-        });
-        console.log(map)
 
-        Post.aggregate([{
+
+
+        try {
+            uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+            console.log("uid:> ", uid1)
+            imgLoc = findCreatorId(uid1).then(async () => {
+                console.log("--------", creatorId, "----------")
+                let map = {}
+                creatorId.forEach(element => {
+                    map[element.postId] = element.state
+                    //console.log("key: ", element.postId, "value: ", element.state)
+                });
+                console.log(map)
+
+                Post.aggregate([{
+                    $lookup: {
+                        from: "users",
+                        localField: "uid",
+                        foreignField: "_id",
+                        as: "test"
+                    }
+                }]).sort(sort).exec(function (err, doc) {
+                    if (err) throw err;
+                    if (doc.length) {
+                        console.log("doc: ", doc)
+                        let map1 = doc.concat(map)
+                        console.log(typeof (map1))
+                        res.send(map1)
+                    } else {
+                        res.status(404);
+                        res.send({
+                            error: `Unable to find posts.`
+                        })
+                    }
+                })
+
+            })
+        } catch (err) {
+            res.status(400).send(err)
+        }
+
+
+
+
+        /*Post.aggregate([{
             $lookup: {
                 from: "users",
                 localField: "uid",
@@ -98,42 +132,18 @@ exports.getAllPosts = function (req, res) {
         }]).sort(sort).exec(function (err, doc) {
             if (err) throw err;
             if (doc.length) {
-                console.log("doc: ", doc)
-                let map1 = doc.concat(map)
-                console.log(typeof(map1))
-                res.send(map1)
+                var i = 0
+                doc.forEach(element => {
+                    i++
+                    console.log("h ", element)
+                })
+                res.send(doc)
             } else {
                 res.status(404);
                 res.send({
                     error: `Unable to find posts.`
                 })
             }
-        })
-
-    })
-
-    /*Post.aggregate([{
-        $lookup: {
-            from: "users",
-            localField: "uid",
-            foreignField: "_id",
-            as: "test"
-        }
-    }]).sort(sort).exec(function (err, doc) {
-        if (err) throw err;
-        if (doc.length) {
-            var i = 0
-            doc.forEach(element => {
-                i++
-                console.log("h ", element)
-            })
-            res.send(doc)
-        } else {
-            res.status(404);
-            res.send({
-                error: `Unable to find posts.`
-            })
-        }
-    })*/
-}
+        })*/
+    }
 }

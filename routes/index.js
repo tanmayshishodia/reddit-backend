@@ -11,6 +11,7 @@ const StateSend = require('../controller/getPostState')
 const voteComments = require('../controller/commentState')
 const getComments = require('../controller/getComments')
 const getReply = require('../controller/getReply')
+const authorize = require('../middleware/authorize')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -22,16 +23,16 @@ router.get('/', ensureGuest, (req, res) => {
 
 
 //@route create post   POST /
-router.post('/upload', upload, post.uploads)
+router.post('/upload', authorize(), upload, post.uploads)
 
 //@route create comment  POST /
-router.post('/postComments/:id/:pid', postComment.postComment)
+router.post('/postComments/:id/:pid', authorize(), postComment.postComment)
 
-//
-router.post('/votePosts/:id', votePosts.postState)
+//@route vote Posts
+router.post('/votePosts/:id', authorize(), votePosts.postState)
 
-//
-router.post('/votecomments/:id/:pid', voteComments.commentState)
+//@route vote comments and replies
+router.post('/votecomments/:id/:pid', authorize(), voteComments.commentState)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)

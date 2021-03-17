@@ -10,6 +10,8 @@ const MongoStore = require('connect-mongo').default
 const connectDB = require('./config/db')
 const AWS = require('aws-sdk')
 const cors = require('cors')
+
+const authorize = require('./middleware/authorize')
 //const uuid = require('uuid/v4')
 const {
   v4: uuid
@@ -114,7 +116,9 @@ app.use(function onError(err, req, res, next) {
   res.end(res.sentry + "\n");
 });
 
-//app.listen(3000)
+/*app.listen(3000, ()=> {
+  console.log("3000")
+})*/
 
 
 module.exports = app
