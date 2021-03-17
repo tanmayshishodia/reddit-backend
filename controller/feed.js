@@ -54,7 +54,7 @@ exports.getAllPosts = function (req, res) {
     console.log("UID:---------> ", uid1)
     if (uid1 == undefined)
         console.log("UNDEFINED")
-    if (uid1 == "\"\"" || uid1 == undefined) {
+    if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
         console.log("\n\n\nyayeyeyebeebbeveubveuue_)))))))))))))))))000000000000\n\n")
         Post.aggregate([{
             $lookup: {
