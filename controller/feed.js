@@ -101,7 +101,7 @@ exports.getAllPosts = function (req, res) {
                 console.log("doc: ", doc)
                 let map1 = doc.concat(map)
                 console.log(typeof(map1))
-                res.send(doc)
+                res.send(map1)
             } else {
                 res.status(404);
                 res.send({
