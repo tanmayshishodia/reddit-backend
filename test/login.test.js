@@ -25,7 +25,21 @@ describe("POST /login", () => {
                     "email": "roy.a2yush@gmail.com"
                 }
             });
-        
         expect(login.statusCode).toBe(200);
     }, 30000);
 });
+
+
+describe("POST /register", () => {
+    test("Register user after login for first time", async () => {
+        const register = await request(app)
+            .post("/register")
+            .set('uid', '"6045fd1e46373130ec9d2431"')
+            .send({
+                username: "tanmayshishodia",
+                dob: "1998-12-15"
+            });
+        expect(register.statusCode).toBe(404); //this user already exists so
+    }, 30000);
+});
+
