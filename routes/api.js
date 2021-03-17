@@ -1,4 +1,4 @@
-let feedController = require('../controller/feed1')
+let feedController = require('../controller/feed')
 const express = require('express')
 const router = express.Router()
 

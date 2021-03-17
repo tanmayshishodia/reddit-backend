@@ -51,6 +51,29 @@ exports.getAllPosts = function (req, res) {
 
 
     var uid1 = req.headers.uid
+    if(uid1 == "\"\"") {
+        console.log("\n\n\nyayeyeyebeebbeveubveuue_)))))))))))))))))000000000000\n\n")
+        Post.aggregate([{
+            $lookup: {
+                from: "users",
+                localField: "uid",
+                foreignField: "_id",
+                as: "test"
+            }
+        }]).sort(sort).exec(function (err, doc) {
+            if (err) throw err;
+            if (doc.length) {
+                console.log(doc)
+                console.log(typeof(doc))
+                res.send(doc)
+            } else {
+                res.status(404);
+                res.send({
+                    error: `Unable to find posts.`
+                })
+            }
+        })
+    } else {
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
     console.log("uid: ", uid1)
     imgLoc = findCreatorId(uid1).then(async() => {
@@ -109,4 +132,5 @@ exports.getAllPosts = function (req, res) {
             })
         }
     })*/
+}
 }
