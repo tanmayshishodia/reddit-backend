@@ -20,6 +20,4 @@ exports.postState = async(req, res, next) => {
             res.send(docs)
         } 
     });
-    //})
-    console.log("Bye")
 }
