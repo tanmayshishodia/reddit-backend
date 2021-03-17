@@ -17,6 +17,7 @@ exports.login = async(req, res, next) => {
         var firstLogin;
         console.log(user)
         if (user) {
+          console.log("LoggedIn")
           firstLogin = 0;
           req.session.uid = user._id
         } else {

@@ -16,29 +16,11 @@ function findCreatorId(id) {
             } 
             else{ 
                 console.log("Result---- : ", docs); 
-                //creatorId = docs.uid
-                //console.log("creatorid------: ", creatorId)
                 creatorId = docs
                 console.log("docs: ", docs)
                 resolve()
             } 
         });
-
-
-        // PostState.findById(id, async(err, docs) => { 
-        //     if (err){ 
-        //         console.log(err);
-        //         res.status(500).send(err)
-        //         reject(err)
-        //     } 
-        //     else{ 
-        //         console.log("Result---- : ", docs); 
-        //         //creatorId = docs.uid
-        //         //console.log("creatorid------: ", creatorId)
-        //         creatorId = docs
-        //         resolve()
-        //     } 
-        // });
     })
 }
 
@@ -67,24 +49,6 @@ exports.getAllPosts = function (req, res) {
             }
     }
 
-    // Post.find({ }).populate({
-    //     path: 'uid'
-    // }).sort(sort).exec(function (err, doc) {
-    //     if (err) throw err;
-    //     if (doc.length) {
-    //         var i = 0
-    //         doc.forEach(element => {
-    //             i++
-    //             console.log("h ", element)
-    //         })
-    //         res.send(doc)
-    //     } else {
-    //         res.status(404);
-    //         res.send({
-    //             error: `Unable to find posts.`
-    //         })
-    //     }
-    // })
 
     var uid1 = req.headers.uid
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
@@ -109,10 +73,9 @@ exports.getAllPosts = function (req, res) {
             if (err) throw err;
             if (doc.length) {
                 console.log("doc: ", doc)
-                //doc = { ...doc, ...map }
-                //doc = { ...doc, ...map }
                 let map1 = doc.concat(map)
-                res.json(map1)
+                console.log(typeof(map1))
+                res.send(doc)
             } else {
                 res.status(404);
                 res.send({
