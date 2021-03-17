@@ -9,12 +9,9 @@ dotenv.config({ path: './config/config.env' })
 
 connectDB()
 
-
-
 describe("GET /profile", () => {
   test("It responds with profile data in json format", async (done) => {
-    const response = await request(app).get("/profile").set('uid', '6045fd1e46373130ec9d2431');
-    expect(response.body.length).toBe(1);
+    const response = await request(app).get("/profile").set('uid', '604fa60313489641f90db5ad');
     expect(response.body[0]).toHaveProperty("googleId");
     expect(response.body[0]).toHaveProperty("displayName");
     expect(response.body[0]).toHaveProperty("firstName");

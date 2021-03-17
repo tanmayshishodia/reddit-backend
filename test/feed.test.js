@@ -13,7 +13,7 @@ connectDB()
 
 describe("GET /feed", () => {
     test("It responds with feed data in json format", async (done) => {
-        const response = await request(app).get("/feed").set('uid', '6045fd1e46373130ec9d2431');
+        const response = await request(app).get("/feed").set('uid', '"6045fd1e46373130ec9d2431"');
         expect(response.body[0]).toHaveProperty("uid");
         expect(response.body[0]).toHaveProperty("caption");
         expect(response.body[0]).toHaveProperty("Etag");
