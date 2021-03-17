@@ -61,7 +61,7 @@ app.use(Sentry.Handlers.tracingHandler());
 
 
 //Newly added -----------------------
-let whitelist = ['http://localhost:8000', 'https://accounts.google.com/o/oauth2/v2/auth']
+let whitelist = ['http://localhost:8000', 'https://accounts.google.com/o/oauth2/v2/auth', 'http://localhost:3000']
 
 app.use(cors({
   origin: function (origin, callback) {
