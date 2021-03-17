@@ -28,26 +28,6 @@ function findCreatorId(id) {
     })
 }
 
-// function findCreatorId(id) {
-
-//     return new Promise((resolve, reject) => {
-//         Comment.findById(id, async (err, docs) => {
-//             if (err) {
-//                 console.log(err);
-//                 res.status(500).send(err)
-//                 reject(err)
-//             }
-//             else {
-//                 console.log("Result---- : ", docs);
-//                 //creatorId = docs.uid
-//                 //console.log("creatorid------: ", creatorId)
-//                 creatorId = docs.uid
-//                 resolve()
-//             }
-//         });
-//     })
-// }
-
 exports.postComment = async (req, res, next) => {
     var uid1 = req.headers.uid
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
@@ -76,10 +56,10 @@ exports.postComment = async (req, res, next) => {
             if(req.params.pid != "null") {
                 imgLoc = findCreatorId(req.params.pid).then(async () => {
                     updateKarma.updateKarma(creatorId, req, "increment", 1)
-                    res.send("Done")
+                    res.send(post)
                 })
             } else
-            res.send("Done")
+            res.send(post)
         })
     } catch (err) {
         console.log(err)
