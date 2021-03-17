@@ -51,7 +51,7 @@ exports.getAllPosts = function (req, res) {
 
 
     var uid1 = req.headers.uid
-    if(uid1 == "\"\"") {
+    if(uid1 == "\"\"" || uid.length == 0) {
         console.log("\n\n\nyayeyeyebeebbeveubveuue_)))))))))))))))))000000000000\n\n")
         Post.aggregate([{
             $lookup: {
