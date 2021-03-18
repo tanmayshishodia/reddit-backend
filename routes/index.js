@@ -18,9 +18,9 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
 // @desc    Login/Landing page
 // @route   GET /
-router.get('/', ensureGuest, (req, res) => {
-    res.send('login')
-  })
+// router.get('/', ensureGuest, (req, res) => {
+//     res.send('login')
+//   })
 
 
 //@route create post   POST /

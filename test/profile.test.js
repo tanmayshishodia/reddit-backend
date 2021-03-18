@@ -24,7 +24,7 @@ describe("GET /profile", () => {
     expect(response.body[0]).toHaveProperty("badge");
     expect(response.statusCode).toBe(200);
     done()
-  });
+  }, 30000);
 });
 
 describe("GET /profile/posts", () => {
@@ -35,7 +35,7 @@ describe("GET /profile/posts", () => {
     expect(response.body[0]).toHaveProperty("createdAt");
     expect(response.statusCode).toBe(200);
     done()
-  });
+  }, 30000);
 });
 
 describe("GET /profile/comments", () => {
@@ -49,7 +49,7 @@ describe("GET /profile/comments", () => {
     expect(response.body[0]).toHaveProperty("createdAt");
     expect(response.statusCode).toBe(200);
     done()
-  });
+  }, 30000);
 });
 
 
