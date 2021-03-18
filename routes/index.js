@@ -36,7 +36,7 @@ router.post('/votePosts/:id', authorize(), votePosts.postState)
 router.post('/votecomments/:id', authorize(), voteComments.commentState)
 
 //test route
-router.post('/postStateTest', PostStateTest.postStateTest)
+//router.post('/postStateTest', PostStateTest.postStateTest)
 
 //@route create login  POST /
 router.post('/login', Login.login)
