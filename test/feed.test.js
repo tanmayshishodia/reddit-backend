@@ -22,3 +22,15 @@ describe("GET /feed", () => {
         done()
     });
 });
+
+describe("GET /feed", () => {
+    test("It responds with feed data in json format", async (done) => {
+        const response = await request(app).get("/feed")
+        expect(response.body[0]).toHaveProperty("uid");
+        expect(response.body[0]).toHaveProperty("caption");
+        expect(response.body[0]).toHaveProperty("createdAt");
+        expect(response.body[0]).toHaveProperty("test");
+        expect(response.statusCode).toBe(200);
+        done()
+    });
+});
