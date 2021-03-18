@@ -33,7 +33,7 @@ router.post('/postComments/:id/:pid', authorize(), postComment.postComment)
 router.post('/votePosts/:id', authorize(), votePosts.postState)
 
 //@route vote comments and replies
-router.post('/votecomments/:id/:pid', authorize(), voteComments.commentState)
+router.post('/votecomments/:id', authorize(), voteComments.commentState)
 
 //test route
 router.post('/postStateTest', PostStateTest.postStateTest)
