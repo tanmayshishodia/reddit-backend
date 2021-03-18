@@ -45,7 +45,7 @@ exports.getAllPosts = function (req, res) {
             break;
         default:
             sort = {
-                votes: -1
+                createdAt: -1
             }
     }
 
