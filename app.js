@@ -4,7 +4,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const morgan = require('morgan')
-const passport = require('passport')
+//const passport = require('passport')
 const session = require('express-session')
 const MongoStore = require('connect-mongo').default
 const connectDB = require('./config/db')
@@ -30,7 +30,7 @@ dotenv.config({
 })
 
 // Passport config
-require('./config/passport')(passport)
+//require('./config/passport')(passport)
 
 connectDB()
 
@@ -96,13 +96,13 @@ app.use(
 )
 
 // Passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.initialize())
+// app.use(passport.session())
 app.use(express.json());
 
 // Routes
 app.use('/', require('./routes/index'))
-app.use('/auth', require('./routes/auth'))
+// app.use('/auth', require('./routes/auth'))
 app.use('/feed', require('./routes/api'))
 app.use('/leaderboard', require('./routes/leaderboard'))
 app.use('/profile', require('./routes/profile'))
