@@ -63,9 +63,9 @@ app.use(Sentry.Handlers.tracingHandler());
 //Newly added -----------------------
 let whitelist = ['http://localhost:8000', 'https://accounts.google.com/o/oauth2/v2/auth', 'http://localhost:3000', 'https://obscure-journey.herokuapp.com']
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*")
-}) 
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*")
+// }) 
 
 
 app.use(cors({
@@ -120,5 +120,7 @@ app.use(function onError(err, req, res, next) {
   res.statusCode = 500;
   res.end(res.sentry + "\n");
 });
+
+//app.listen(3000)
 
 module.exports = app
