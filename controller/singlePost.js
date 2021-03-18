@@ -4,11 +4,11 @@ let User = require('../models/User')
 const mongoose = require('mongoose')
 
 let creatorId
-function findCreatorId(id) {
+function findCreatorId(id, pid) {
 
     return new Promise(async (resolve, reject) => {
 
-        const result = await PostState.find({ uid: id }, function (err, docs) {
+        const result = await PostState.find({ uid: id , postId: pid }, function (err, docs) {
             if (err) {
                 console.log(err);
                 res.status(500).send(err)
@@ -74,21 +74,24 @@ exports.singlePost = function (req, res) {
         try {
             uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
             console.log("uid:> ", uid1)
-            imgLoc = findCreatorId(uid1).then(async () => {
+            imgLoc = findCreatorId(uid1, req.params.id).then(async () => {
                 console.log("--------", creatorId, "----------")
-                let map = {}
+                let map
                 creatorId.forEach(element => {
-                    map[element.postId] = element.state
+                    map = element.state
                 });
                 console.log(map)
 
 
-                Post.findById(req.params.id, function (err, docs) { 
+                Post.findById(req.params.id, function (err, doc) { 
                     if (err){ 
                         res.status(404).send("not found")
                     } 
                     else{
-                        let map1 = doc.concat(map)
+                        append = {
+                            state: map
+                        }
+                        map1 = {...doc._doc, ...append}
                         console.log(typeof (map1))
                         res.status(200).send(map1)
                     } 
