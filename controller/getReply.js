@@ -12,14 +12,14 @@ function findCreatorId(id) {
 
         const result = await CommentState.find({ uid: id }, function (err, docs) {
             if (err) {
-                console.log(err);
+                //console.log(err);
                 res.status(500).send(err)
                 reject(err)
             }
             else {
-                console.log("docs---- : ", docs);
+                //console.log("docs---- : ", docs);
                 creatorId = docs
-                console.log("creatorId: ", creatorId)
+                //console.log("creatorId: ", creatorId)
                 resolve()
             }
         });
@@ -54,9 +54,9 @@ exports.getAllReplies = function (req, res) {
     }
 
     var uid1 = req.headers.uid
-    console.log("UID:---------> ", uid1)
-    if (uid1 == undefined)
-        console.log("UNDEFINED")
+    //console.log("UID:---------> ", uid1)
+    //if (uid1 == undefined)
+        //console.log("UNDEFINED")
     if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
         Comment.find({ parentId: req.params.id }).populate({
             path: 'uid'
@@ -74,23 +74,23 @@ exports.getAllReplies = function (req, res) {
     } else {
         try {
             uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-            console.log("uid:> ", uid1)
+            //console.log("uid:> ", uid1)
             imgLoc = findCreatorId(uid1).then(async () => {
-                console.log("--------", creatorId, "----------")
+                //console.log("--------", creatorId, "----------")
                 let map = {}
                 creatorId.forEach(element => {
                     map[element.commentId] = element.state
                     //console.log("key: ", element.postId, "value: ", element.state)
                 });
-                console.log(map)
+                //console.log(map)
                 Comment.find({ parentId: req.params.id }).populate({
                     path: 'uid'
                 }).sort(sort).exec(function (err, doc) {
                     if (err) throw err;
                     if (doc.length) {
-                        console.log("doc: ", doc)
+                        //console.log("doc: ", doc)
                         let map1 = doc.concat(map)
-                        console.log(typeof (map1))
+                        //console.log(typeof (map1))
                         res.send(map1)
                     } else {
                         res.status(404);

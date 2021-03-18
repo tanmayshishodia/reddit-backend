@@ -18,9 +18,9 @@ router.get(
     failureRedirect: '/'
   }), //redirect after failure
   async (req, res) => {
-    console.log(req.user.googleId)
+    //console.log(req.user.googleId)
     req.session.uid = req.user._id;
-    console.log(req.session.uid)
+    //console.log(req.session.uid)
     const userDetails = await User.findById(req.session.uid)
 
     console.log("Username:", userDetails)

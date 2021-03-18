@@ -8,8 +8,8 @@ exports.username = async(req, res, next) => {
     //check if username is unique
     const result = await post.find({ username: req.body.username }, async(err, docs) => {
       if (err) {
-        console.log(err);
-        res.send(err)
+        //console.log(err);
+        res.status(400).send(err)
       }
       else {
         if (Object.keys(docs).length != 0) {
@@ -28,7 +28,7 @@ exports.username = async(req, res, next) => {
     }, function (err, result) {
       if (err) throw err;
   
-      console.log(`[${req.params.id}] user edited!`)
+      //console.log(`[${req.params.id}] user edited!`)
       res.redirect("/")
     })
   }

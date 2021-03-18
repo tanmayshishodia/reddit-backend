@@ -14,7 +14,8 @@ exports.postState = async(req, res, next) => {
     
     const result = await postState.find({ uid: uid1 }, function (err, docs) { 
         if (err){ 
-            console.log(err); 
+            //console.log(err);
+            res.status(400).send("Something went wrong")
         } 
         else{ 
             res.send(docs)

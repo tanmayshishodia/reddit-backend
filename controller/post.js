@@ -25,13 +25,13 @@ function uploadToS3(params) {
     return new Promise((resolve, reject) => {
         return s3.upload(params, (error, data) => {
             if (error) {
-                console.log("error in upload")
-                console.log(err)
+                //console.log("error in upload")
+                //console.log(err)
                 res.status(500).send(error)
                 reject(err)
             } else {
-                console.log("uploaded successfully!")
-                console.log(data)
+                //console.log("uploaded successfully!")
+                //console.log(data)
                 uploadData = data
                 resolve()
             }
@@ -67,11 +67,11 @@ async function uploadToMongo(req, post, res) {
         votes: 0,
     }
 
-    console.log(post)
+    //console.log(post)
 
     //appending voteCount to post
     post = { ...post, ...voteCount }
-    console.log(post)
+    //console.log(post)
 
     //uploading to server
     let newUpload = new uploadPostModel(post);
@@ -84,8 +84,8 @@ async function uploadToMongo(req, post, res) {
 
         res.json(a1)
     } catch (err) {
-        console.log(err)
-        res.send(err)
+        //console.log(err)
+        res.status(400).send(err)
     }
 }
 
@@ -94,9 +94,9 @@ exports.uploads = async (req, res, next) => {
     //retrived files from uploads
     const files = req.file;
 
-    console.log(files)
+    //console.log(files)
 
-    console.log(req.body);
+    //console.log(req.body);
 
     //if does not contain caption: return error
     if (!req.body.caption) {
@@ -107,9 +107,9 @@ exports.uploads = async (req, res, next) => {
 
     var uid1 = req.headers.uid
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-    console.log(uid1)
-    console.log(typeof(uid1))
-    console.log(req.body)
+    // console.log(uid1)
+    // console.log(typeof(uid1))
+    // console.log(req.body)
     //console.log("Post1: "+post)
     //TODO: get uid from sessions
     let post = {
@@ -119,7 +119,7 @@ exports.uploads = async (req, res, next) => {
 
     karmaPoints = 4
 
-    console.log(post)
+    // console.log(post)
 
     //appending description to post, if post is present in description
     if (req.body.description) {
@@ -132,13 +132,13 @@ exports.uploads = async (req, res, next) => {
         post = { ...post, ...postDesc }
     }
 
-    console.log(post)
+    //console.log(post)
 
     //CHANGE: upload in S3 instead of db
     //convert images to base64 encoding and append
     if (req.file) {
 
-        console.log("file present!")
+        //console.log("file present!")
 
         let imgLoc
 
@@ -146,7 +146,7 @@ exports.uploads = async (req, res, next) => {
 
         let uploadImg = req.file.originalname.split(".")
         const imgExt = uploadImg[uploadImg.length - 1]
-        console.log(uploadImg)
+        //console.log(uploadImg)
 
         const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
@@ -156,13 +156,13 @@ exports.uploads = async (req, res, next) => {
             ACL: 'public-read'
         }
 
-        console.log(params)
+        //console.log(params)
 
         let imgDesc
 
         imgLoc = uploadToS3(params).then(() => {
-            console.log("resolved")
-            console.log(uploadData)
+            //console.log("resolved")
+            //console.log(uploadData)
 
             imgDesc = {
                 Etag: uploadData.ETag,
@@ -175,10 +175,10 @@ exports.uploads = async (req, res, next) => {
             post = { ...post, ...imgDesc }
 
             uploadToMongo(req, post, res)
-            console.log(post)
+            //console.log(post)
 
         }).catch(() => {
-            console.log("Error in amazon upload")
+            //console.log("Error in amazon upload")
         })
 
         // console.log(imgLoc)
@@ -211,8 +211,8 @@ exports.uploads = async (req, res, next) => {
 
         })*/
     } else {
-        console.log("_____________")
-        console.log(post)
+        //console.log("_____________")
+        //console.log(post)
         uploadToMongo(req, post, res)
     }
 

@@ -1,6 +1,7 @@
 let Post = require("../models/Post");
 let Comment = require('../models/Comment')
 let User = require('../models/User')
+const mongoose = require('mongoose')
 const Sentry = require("@sentry/node");
 
 exports.posts = function (req, res) {
@@ -28,8 +29,11 @@ exports.posts = function (req, res) {
             }
     }
 
+    var uid1 = req.headers.uid
+    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+
     Post.find({
-        uid: req.headers.uid
+        uid: uid1
     }).sort(sort).exec(function (err, doc) {
         if (err) 
             throw err;
@@ -70,7 +74,7 @@ exports.comments = function (req, res) {
     }
 
     Comment.find({
-        uid: req.headers.uid
+        uid: uid1
     }).sort(sort).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {
@@ -86,7 +90,7 @@ exports.comments = function (req, res) {
 
 exports.profile = function (req, res) {
     User.find({
-        _id: req.headers.uid
+        _id: uid1
     }).exec(function (err, doc) {
         if (err) throw err;
         if (doc.length) {

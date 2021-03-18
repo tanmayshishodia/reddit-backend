@@ -13,12 +13,12 @@ function findCreatorId(id) {
     return new Promise((resolve, reject) => {
         Post.findById(id, async (err, docs) => {
             if (err) {
-                console.log(err);
-                res.status(500).send(err)
+                //console.log(err);
+                res.status(400).send(err)
                 reject(err)
             }
             else {
-                console.log("Result---- : ", docs);
+                //console.log("Result---- : ", docs);
                 //creatorId = docs.uid
                 //console.log("creatorid------: ", creatorId)
                 creatorId = docs.uid
@@ -62,7 +62,7 @@ exports.postComment = async (req, res, next) => {
             res.send(post)
         })
     } catch (err) {
-        console.log(err)
-        res.send(err)
+        //console.log(err)
+        res.status(400).send(err)
     }
 }

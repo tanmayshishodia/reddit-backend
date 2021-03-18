@@ -16,12 +16,12 @@ function findCreatorId(id) {
     return new Promise((resolve, reject) => {
         Post.findById(id, async(err, docs) => { 
             if (err){ 
-                console.log(err);
+                //console.log(err);
                 res.status(500).send(err)
                 reject(err)
             } 
             else{ 
-                console.log("Result---- : ", docs); 
+                //console.log("Result---- : ", docs); 
                 //creatorId = docs.uid
                 //console.log("creatorid------: ", creatorId)
                 creatorId = docs.uid
@@ -42,7 +42,8 @@ exports.postState = async (req, res, next) => {
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
     const result = await postState.find({ uid: uid1, postId: req.params.id }, async (err, docs) => {
         if (err) {
-            console.log(err);
+            res.status(400).send("Something went wrong")
+            //console.log(err);
         } else {
 
             //finding id of the post creater
@@ -64,18 +65,18 @@ exports.postState = async (req, res, next) => {
 
 
 
-            console.log("DOCS-----: ", docs)
-            console.log("CreatorId: ", creatorId)
-            //console.log("state: ", docs[0].state)
-            console.log("action: ", req.body.actions)
+            // console.log("DOCS-----: ", docs)
+            // console.log("CreatorId: ", creatorId)
+            // //console.log("state: ", docs[0].state)
+            // console.log("action: ", req.body.actions)
             if (Object.keys(docs).length == 0) {
                 //add 1-0
 
                 let voteState = -1
-                console.log("Decrement")
+                //console.log("Decrement")
                 if(req.body.actions == "increment") {
                     voteState = 1
-                    console.log("-------Changed-------")
+                    //console.log("-------Changed-------")
                 }
 
                 let post = {
@@ -84,7 +85,7 @@ exports.postState = async (req, res, next) => {
                     state: voteState
                 }
 
-                console.log("Post-----: ", post)
+                //console.log("Post-----: ", post)
 
                 let newUpload = new postState(post);
 
@@ -103,19 +104,19 @@ exports.postState = async (req, res, next) => {
                     }, function (err, result) {
                         if (err) throw err;
     
-                        console.log(`[${req.params.id}] post edited!`)
+                        //console.log(`[${req.params.id}] post edited!`)
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                         //
                         res.send("upvoted")
                     })
                 } catch (err) {
-                    console.log(err)
-                    res.send(err)
+                    //console.log(err)
+                    res.status(400).send(err)
                 }
 
             } else if (docs[0].state == 1 && req.body.actions == "increment" || docs[0].state == -1 && req.body.actions == "decrement") {
-                console.log("----SAME VOTE----")
+                //console.log("----SAME VOTE----")
                 //update to make 0
                 postState.updateOne({
                     uid: uid1,
@@ -125,7 +126,7 @@ exports.postState = async (req, res, next) => {
                 }, function (err, result) {
                     if (err) throw err;
 
-                    console.log(`[${req.params.id}] post edited!`)
+                    //console.log(`[${req.params.id}] post edited!`)
                     //res.redirect("/")
                     updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                     var increase = -1
@@ -140,7 +141,7 @@ exports.postState = async (req, res, next) => {
                     }, function (err, result) {
                         if (err) throw err;
     
-                        console.log(`[${req.params.id}] post edited!`)
+                        //console.log(`[${req.params.id}] post edited!`)
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                         //res.json(a1)
@@ -148,7 +149,7 @@ exports.postState = async (req, res, next) => {
                     })
                 })
             } else if(docs[0].state == 1 && req.body.actions == "decrement" || docs[0].state == -1 && req.body.actions == "increment" || docs[0].state == 0) {
-                console.log("-----DIFF VOTE-----")
+                //console.log("-----DIFF VOTE-----")
                 //update to make -1
                 let voteState = -1
                 if(req.body.actions == "increment")
@@ -162,7 +163,7 @@ exports.postState = async (req, res, next) => {
                 }, function (err, result) {
                     if (err) throw err;
 
-                    console.log(`[${req.params.id}] post edited!`)
+                    //console.log(`[${req.params.id}] post edited!`)
                     var increment = 1 * voteState
                     if(voteState == 1 && docs[0].state == -1 || voteState == -1 && docs[0].state == 1) {
                         updateKarma.updateKarma(creatorId, req, req.body.actions, 2)
@@ -180,7 +181,7 @@ exports.postState = async (req, res, next) => {
                     }, function (err, result) {
                         if (err) throw err;
     
-                        console.log(`[${req.params.id}] post edited!`)
+                        //console.log(`[${req.params.id}] post edited!`)
                         //res.redirect("/")
                         //updateKarma.updateKarma(creatorId, req, req.body.actions, -1)
                         //res.json(a1)

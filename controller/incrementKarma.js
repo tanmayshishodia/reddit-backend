@@ -1,9 +1,9 @@
 const user = require('../models/User')
 
 exports.updateKarma = async function(id, req, state, karmaPoints) {
-    console.log("state: ",state)
+    //console.log("state: ",state)
     if(state == "increment") {
-        console.log("karma points: ",karmaPoints)
+        //console.log("karma points: ",karmaPoints)
         user.updateOne(
             {_id: id},
             {
@@ -20,7 +20,7 @@ exports.updateKarma = async function(id, req, state, karmaPoints) {
             }
         )
     } else if(state == "decrement") {
-        console.log(karmaPoints)
+        //console.log(karmaPoints)
         user.updateOne(
             {_id: id},
             {

@@ -1,6 +1,6 @@
 const User = require('../models/User')
 exports.login = async(req, res, next) => {
-    console.log(req.body.profileObj.googleId)
+    //console.log(req.body.profileObj.googleId)
     // var data = req.body
     // console.log(data)
     const newUser = {
@@ -11,13 +11,13 @@ exports.login = async(req, res, next) => {
         image: req.body.profileObj.imageUrl,
         email: req.body.profileObj.email
       }
-      console.log(newUser)
+      //console.log(newUser)
       try {
         let user = await User.findOne({ googleId: req.body.profileObj.googleId })
         var firstLogin;
-        console.log(user)
+        //console.log(user)
         if (user) {
-          console.log("LoggedIn")
+          //console.log("LoggedIn")
           firstLogin = 0;
           req.session.uid = user._id
         } else {
@@ -28,9 +28,9 @@ exports.login = async(req, res, next) => {
           }
 
           data = {user,firstLogin}
-          console.log(data)
+          //console.log(data)
           res.send(data)
       } catch (err) {
-        console.error(err)
+        res.status(400).send(err)
       }
 }
