@@ -73,6 +73,8 @@ exports.comments = function (req, res) {
             }
     }
 
+    var uid1 = req.headers.uid
+    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
     Comment.find({
         uid: uid1
     }).sort(sort).exec(function (err, doc) {
@@ -89,6 +91,9 @@ exports.comments = function (req, res) {
 }
 
 exports.profile = function (req, res) {
+
+    var uid1 = req.headers.uid
+    uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
     User.find({
         _id: uid1
     }).exec(function (err, doc) {
