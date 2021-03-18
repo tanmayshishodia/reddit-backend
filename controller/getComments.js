@@ -55,7 +55,7 @@ exports.getAllComments = function (req, res) {
 
     var uid1 = req.headers.uid
     //console.log("UID:---------> ", uid1)
-    if (uid1 == undefined)
+    //if (uid1 == undefined)
         //console.log("UNDEFINED")
     if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
         Comment.find({ postId: req.params.id, parentId: null }).populate({
