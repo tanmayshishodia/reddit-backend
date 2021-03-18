@@ -6,7 +6,7 @@ A web application for an open forum platform. Users can create a post and add co
 [![Build Status](https://travis-ci.org/tanmayshishodia/reddit-backend.svg?branch=main)](https://travis-ci.org/tanmayshishodia/reddit-backend)
 
 ## ER Diagram (WIP)
-![alt text](https://github.com/tanmayshishodia/reddit-backend/blob/main/uploads/reddit-clone-schema.png)
+![alt text](https://github.com/tanmayshishodia/reddit-backend/blob/main/uploads/Screenshot%20from%202021-03-18%2010-09-41.png)
 
 ## API Documentation (WIP)
 https://redditclone1.docs.apiary.io/#
