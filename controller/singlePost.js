@@ -24,7 +24,7 @@ function findCreatorId(id, pid) {
     })
 }
 
-exports.singlePost = function (req, res) {
+exports.singlePost = async function (req, res) {
     let sort;
     action = req.query.action
     switch (action) {
@@ -58,14 +58,17 @@ exports.singlePost = function (req, res) {
         console.log("\n\n\nyayeyeyebeebbeveubveuue_)))))))))))))))))000000000000\n\n")
         
         
-        Post.findById(req.params.id, function (err, docs) { 
-            if (err){ 
-                res.status(404).send("not found")
-            } 
-            else{ 
-                res.status(200).send(docs)
-            } 
-        }); 
+        var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
+            if (err) res.status(404).send("not found");
+            else {
+                append = {
+                    test: [doc._doc.uid]
+                }
+                map1 = {...doc._doc, ...append}
+                console.log(typeof (map1))
+                res.status(200).send(map1)
+            }
+        })
 
     } else {
 
@@ -83,19 +86,35 @@ exports.singlePost = function (req, res) {
                 console.log(map)
 
 
-                Post.findById(req.params.id, function (err, doc) { 
-                    if (err){ 
-                        res.status(404).send("not found")
-                    } 
-                    else{
-                        append = {
+                var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
+                    if (err) res.status(404).send("not found");
+                    else {
+                        let append1 = {
+                            test: [doc._doc.uid]
+                        }
+                        map1 = {...doc._doc, ...append1}
+                        let append = {
                             state: map
                         }
-                        map1 = {...doc._doc, ...append}
-                        console.log(typeof (map1))
-                        res.status(200).send(map1)
-                    } 
-                }); 
+                        map2 = {...map1, ...append}
+                        //console.log(typeof (map1))
+                        res.status(200).send(map2)
+                    }
+                })
+
+                // Post.findById(req.params.id, function (err, doc) { 
+                //     if (err){ 
+                //         res.status(404).send("not found")
+                //     } 
+                //     else{
+                //         append = {
+                //             state: map
+                //         }
+                //         map1 = {...doc._doc, ...append}
+                //         console.log(typeof (map1))
+                //         res.status(200).send(map1)
+                //     } 
+                // }); 
 
              })
         } catch (err) {
