@@ -12,6 +12,7 @@ const voteComments = require('../controller/commentState')
 const getComments = require('../controller/getComments')
 const getReply = require('../controller/getReply')
 const authorize = require('../middleware/authorize')
+const SinglePost = require('../controller/singlePost')
 
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -45,5 +46,7 @@ router.get('/poststate', StateSend.postState)
 router.get('/comments/:id', getComments.getAllComments)
 
 router.get('/reply/:id', getReply.getAllReplies)
+
+router.get('/post/:id', SinglePost.singlePost)
 
 module.exports = router
