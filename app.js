@@ -113,7 +113,7 @@ app.use('/leaderboard', require('./routes/leaderboard'))//DONE
 app.use('/profile', require('./routes/profile'))//DONE
 
 //NEW ROUTES
-app.use('/post', require('./routes/posts'))
+app.use('/post', require('./routes/post'))
 
 
 app.use(Sentry.Handlers.errorHandler());
