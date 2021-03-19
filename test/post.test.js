@@ -10,10 +10,56 @@ dotenv.config({
 })
 
 connectDB()
+var newPostId;
+
+describe("GET /post", () => {
+    test("It responds with feed data in json format", async (done) => {
+        const response = await request(app).get("/post").set('uid', '"6045fd1e46373130ec9d2431"');
+        expect(response.body[0]).toHaveProperty("uid");
+        expect(response.body[0]).toHaveProperty("caption");
+        expect(response.body[0]).toHaveProperty("createdAt");
+        expect(response.body[0]).toHaveProperty("test");
+        expect(response.statusCode).toBe(200);
+        done()
+    }, 30000);
+});
+
+describe("GET /post", () => {
+    test("It responds with feed data in json format", async (done) => {
+        const response = await request(app).get("/post")
+        expect(response.body[0]).toHaveProperty("uid");
+        expect(response.body[0]).toHaveProperty("caption");
+        expect(response.body[0]).toHaveProperty("createdAt");
+        expect(response.body[0]).toHaveProperty("test");
+        expect(response.statusCode).toBe(200);
+        done()
+    }, 30000);
+});
+
+describe("POST /post", () => {
+    test("Create a post by an authenticated user", async () => {
+      const upload = await request(app)
+        .post("/post")
+        .set('uid', '"604fa60313489641f90db5ad"')
+        .send({
+            "caption": "test"
+        });
+      newPostId = JSON.parse(upload.text)._id
+      expect(upload.statusCode).toBe(200);
+    }, 30000);
+  });
+
+describe("GET /post/:id", () => {
+    test("It responds with single post in json format (authenticated user)", async (done) => {
+        const response = await request(app).get(`/post/${newPostId}`).set('uid', '"604fa60313489641f90db5ad"');
+        expect(response.statusCode).toBe(200);
+        done()
+    }, 30000);
+});
 
 describe("GET /post/:id", () => {
     test("It responds with single post in json format", async (done) => {
-        const response = await request(app).get("/post/604fa778019cb9437f82e8ef").set('uid', '"604fa60313489641f90db5ad"');
+        const response = await request(app).get(`/post/${newPostId}`)
         expect(response.statusCode).toBe(200);
         done()
     }, 30000);
@@ -30,14 +76,19 @@ describe("GET /poststate", () => {
     }, 30000);
 });
 
-describe("POST /upload", () => {
-    test("Create a post by an authenticated user", async () => {
+
+describe("PUT /post/:id", () => {
+    test("Edit a post by an authenticated user", async () => {
       const upload = await request(app)
-        .post("/upload")
+        .put(`/post/${newPostId}`)
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
-            "caption": "test"
+            "caption": "hello"
         });
       expect(upload.statusCode).toBe(200);
     }, 30000);
   });
+
+
+
+

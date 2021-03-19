@@ -1,4 +1,3 @@
-
 const post = require('../controller/post')
 const authorize = require('../middleware/authorize')
 const multer = require('../middleware/multer')
