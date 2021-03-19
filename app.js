@@ -108,9 +108,12 @@ app.use(express.json());
 // Routes
 app.use('/', require('./routes/index'))
 // app.use('/auth', require('./routes/auth'))
-app.use('/feed', require('./routes/api'))
-app.use('/leaderboard', require('./routes/leaderboard'))
-app.use('/profile', require('./routes/profile'))
+app.use('/feed', require('./routes/api'))//DONE
+app.use('/leaderboard', require('./routes/leaderboard'))//DONE
+app.use('/profile', require('./routes/profile'))//DONE
+
+//NEW ROUTES
+app.use('/post', require('./routes/posts'))
 
 
 app.use(Sentry.Handlers.errorHandler());
@@ -121,6 +124,6 @@ app.use(function onError(err, req, res, next) {
   res.end(res.sentry + "\n");
 });
 
-//app.listen(3000)
+/*app.listen(3000)*/
 
 module.exports = app

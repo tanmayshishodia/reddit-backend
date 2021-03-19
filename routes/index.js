@@ -24,7 +24,7 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
 
 //@route create post   POST /
-router.post('/upload', authorize(), upload, post.uploads)
+router.post('/upload', authorize(), upload, post.uploads)//DONE
 
 //@route create comment  POST /
 router.post('/postComments/:id/:pid', authorize(), postComment.postComment)
@@ -39,14 +39,14 @@ router.post('/votecomments/:id', authorize(), voteComments.commentState)
 //router.post('/postStateTest', PostStateTest.postStateTest)
 
 //@route create login  POST /
-router.post('/login', Login.login)
+router.post('/login', Login.login)//DONE
 
-router.get('/poststate', StateSend.postState)
+router.get('/poststate', StateSend.postState)//DONE
 
-router.get('/comments/:id', getComments.getAllComments)
+router.get('/comments/:id', getComments.getAllComments)//DONE
 
-router.get('/reply/:id', getReply.getAllReplies)
+router.get('/reply/:id', getReply.getAllReplies)//DONE
 
-router.get('/post/:id', SinglePost.singlePost)
+router.get('/post/:id', SinglePost.singlePost)//DONE
 
 module.exports = router

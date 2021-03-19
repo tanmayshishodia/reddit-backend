@@ -1,23 +1,35 @@
 require('dotenv/config')
 const fs = require('fs')
 const AWS = require('aws-sdk')
-//const uuid = require('uuid/v4')
 const { v4: uuid } = require('uuid');
-const user = require('../models/User')
+const User = require('../models/User')
 
 const mongoose = require('mongoose')
 
-const uploadPostModel = require('../models/Post')
-const updateKarma = require('./incrementKarma')
+const Post = require('../models/Post')
+const UpdateKarma = require('./incrementKarma')
+const PostState = require('../models/PostState')
 
+
+
+
+
+
+
+
+
+
+
+
+//----------------------------------------------------UPLOAD----------------------------------------------------------------
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ID,
     secretAccessKey: process.env.AWS_SECRET
 })
 
 let karmaPoints = 0
-
 let uploadData
+
 
 //Uploading to S3
 function uploadToS3(params) {
@@ -25,13 +37,9 @@ function uploadToS3(params) {
     return new Promise((resolve, reject) => {
         return s3.upload(params, (error, data) => {
             if (error) {
-                //console.log("error in upload")
-                //console.log(err)
                 res.status(500).send(error)
                 reject(err)
             } else {
-                //console.log("uploaded successfully!")
-                //console.log(data)
                 uploadData = data
                 resolve()
             }
@@ -41,64 +49,34 @@ function uploadToS3(params) {
 }
 
 
-//updating Karma
-// function updateKarma(id, req) {
-//     user.updateOne(
-//         {_id: id},
-//         {
-//             $inc: {
-//                 karma: +1
-//             }
-//         },
-//         function (err, result) {
-//             if (err) throw err;
-
-//             if (result) {
-//                 console.log(`[${id}] post karma increased!`)
-//             }
-//         }
-//     )
-// }
-
-
 //Uploading to Mongo
 async function uploadToMongo(req, post, res) {
     let voteCount = {
         votes: 0,
     }
 
-    //console.log(post)
-
-    //appending voteCount to post
     post = { ...post, ...voteCount }
-    //console.log(post)
 
     //uploading to server
-    let newUpload = new uploadPostModel(post);
+    let newUpload = new Post(post);
 
     try {
         const a1 = await newUpload.save()
 
         //calling updateKarma
-        updateKarma.updateKarma(post.uid, req, "increment", karmaPoints)
+        UpdateKarma.updateKarma(post.uid, req, "increment", karmaPoints)
 
         res.json(a1)
     } catch (err) {
-        //console.log(err)
         res.status(400).send(err)
     }
 }
 
-//Handling uploads
+//UPLOAD ROUTE
 exports.uploads = async (req, res, next) => {
-    //retrived files from uploads
+
     const files = req.file;
 
-    //console.log(files)
-
-    //console.log(req.body);
-
-    //if does not contain caption: return error
     if (!req.body.caption) {
         const error = new Error('Invalid Caption');
         error.httpStatusCode = 400;
@@ -107,11 +85,6 @@ exports.uploads = async (req, res, next) => {
 
     var uid1 = req.headers.uid
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-    // console.log(uid1)
-    // console.log(typeof(uid1))
-    // console.log(req.body)
-    //console.log("Post1: "+post)
-    //TODO: get uid from sessions
     let post = {
         uid: uid1,
         caption: req.body.caption
@@ -119,9 +92,6 @@ exports.uploads = async (req, res, next) => {
 
     karmaPoints = 4
 
-    // console.log(post)
-
-    //appending description to post, if post is present in description
     if (req.body.description) {
         let postDesc = {
             desc: req.body.description
@@ -132,13 +102,7 @@ exports.uploads = async (req, res, next) => {
         post = { ...post, ...postDesc }
     }
 
-    //console.log(post)
-
-    //CHANGE: upload in S3 instead of db
-    //convert images to base64 encoding and append
     if (req.file) {
-
-        //console.log("file present!")
 
         let imgLoc
 
@@ -146,7 +110,6 @@ exports.uploads = async (req, res, next) => {
 
         let uploadImg = req.file.originalname.split(".")
         const imgExt = uploadImg[uploadImg.length - 1]
-        //console.log(uploadImg)
 
         const params = {
             Bucket: process.env.AWS_BUCKET_NAME,
@@ -156,13 +119,10 @@ exports.uploads = async (req, res, next) => {
             ACL: 'public-read'
         }
 
-        //console.log(params)
 
         let imgDesc
 
         imgLoc = uploadToS3(params).then(() => {
-            //console.log("resolved")
-            //console.log(uploadData)
 
             imgDesc = {
                 Etag: uploadData.ETag,
@@ -175,46 +135,122 @@ exports.uploads = async (req, res, next) => {
             post = { ...post, ...imgDesc }
 
             uploadToMongo(req, post, res)
-            //console.log(post)
 
         }).catch(() => {
-            //console.log("Error in amazon upload")
+            res.status(500).send("Error in amazon upload")
         })
-
-        // console.log(imgLoc)
-
-        // imgDesc = {
-        //     Etag : imgLoc.ETag,
-        //     Location : imgLoc.Location,
-        //     key : imgLoc.key,
-        //     bucket : imgLoc.Bucket,
-        //     filename : params.Key
-        // }
-
-        // post = {...post, ...imgDesc}
-
-        /*let imgArray = files.map((file) => {
-            let img = fs.readFileSync(file.path)
-            return encode_image = img.toString('base64')
-        })
-
-        imgArray.map((src, index) => {
-            //create object to store data in collection
-            let finalImgArray = {
-                filename : files[index].originalname,
-                contentType: files[index].mimetype,
-                imageBase64: src
-            }
-            
-            //appending images to post id image is present
-            post = {...post, ...imgLoc}/*
-
-        })*/
     } else {
-        //console.log("_____________")
-        //console.log(post)
         uploadToMongo(req, post, res)
     }
 
-    //initializing voteCounter
+}
+
+
+
+
+
+
+//----------------------------------------------------FEED----------------------------------------------------------------
+let creatorId
+function findCreatorId(id) {
+
+    return new Promise(async (resolve, reject) => {
+
+        const result = await PostState.find({ uid: id }, function (err, docs) {
+            if (err) {
+                //console.log(err);
+                res.status(500).send(err)
+                reject(err)
+            }
+            else {
+                creatorId = docs
+                resolve()
+            }
+        });
+    })
+}
+
+exports.getAllPosts = function (req, res) {
+    let sort;
+    action = req.query.action
+    switch (action) {
+        case "top":
+            sort = {
+                votes: -1
+            }
+            break;
+        case "recent":
+            sort = {
+                createdAt: -1
+            }
+            break;
+        case "old":
+            sort = {
+                createdAt: 1
+            }
+            break;
+        default:
+            sort = {
+                createdAt: -1
+            }
+    }
+
+
+    var uid1 = req.headers.uid
+    if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
+        Post.aggregate([{
+            $lookup: {
+                from: "users",
+                localField: "uid",
+                foreignField: "_id",
+                as: "test"
+            }
+        }]).sort(sort).exec(function (err, doc) {
+            if (err) throw err;
+            if (doc.length) {
+                res.send(doc)
+            } else {
+                res.status(404);
+                res.send({
+                    error: `Unable to find posts.`
+                })
+            }
+        })
+    } else {
+
+
+
+        try {
+            uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+            imgLoc = findCreatorId(uid1).then(async () => {
+                let map = {}
+                creatorId.forEach(element => {
+                    map[element.postId] = element.state
+                });
+
+                Post.aggregate([{
+                    $lookup: {
+                        from: "users",
+                        localField: "uid",
+                        foreignField: "_id",
+                        as: "test"
+                    }
+                }]).sort(sort).exec(function (err, doc) {
+                    if (err) throw err;
+                    if (doc.length) {
+                        let map1 = doc.concat(map)
+                        res.send(map1)
+                    } else {
+                        res.status(404);
+                        res.send({
+                            error: `Unable to find posts.`
+                        })
+                    }
+                })
+
+            })
+        } catch (err) {
+            res.status(400).send(err)
+        }
+    }
 }

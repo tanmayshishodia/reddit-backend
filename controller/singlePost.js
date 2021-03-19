@@ -61,12 +61,15 @@ exports.singlePost = async function (req, res) {
         var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
             if (err) res.status(404).send("not found");
             else {
-                append = {
-                    test: [doc._doc.uid]
+                if(doc == null) {
+                    res.status(404).send("not found");
+                } else {
+                    append = {
+                        test: [doc._doc.uid]
+                    }
+                    map1 = {...doc._doc, ...append}
+                    res.status(200).send(map1)
                 }
-                map1 = {...doc._doc, ...append}
-                //console.log(typeof (map1))
-                res.status(200).send(map1)
             }
         })
 
@@ -89,16 +92,19 @@ exports.singlePost = async function (req, res) {
                 var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
                     if (err) res.status(404).send("not found");
                     else {
-                        let append1 = {
-                            test: [doc._doc.uid]
+                        if(doc == null) {
+                            res.status(404).send("not found");
+                        } else {
+                            let append1 = {
+                                test: [doc._doc.uid]
+                            }
+                            map1 = {...doc._doc, ...append1}
+                            let append = {
+                                state: map
+                            }
+                            map2 = {...map1, ...append}
+                            res.status(200).send(map2)
                         }
-                        map1 = {...doc._doc, ...append1}
-                        let append = {
-                            state: map
-                        }
-                        map2 = {...map1, ...append}
-                        //console.log(typeof (map1))
-                        res.status(200).send(map2)
                     }
                 })
 
