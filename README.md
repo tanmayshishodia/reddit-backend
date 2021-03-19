@@ -25,5 +25,5 @@ https://redditclone1.docs.apiary.io/#
 - Coveralls
 - Sentry.io
 
-Web Application Link:
+##Web Application Link:
 https://obscure-journey.herokuapp.com/
