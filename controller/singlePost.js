@@ -8,16 +8,13 @@ function findCreatorId(id, pid) {
 
     return new Promise(async (resolve, reject) => {
 
-        const result = await PostState.find({ uid: id , postId: pid }, function (err, docs) {
+        const result = await PostState.find({ uid: id, postId: pid }, function (err, docs) {
             if (err) {
-                //console.log(err);
                 res.status(500).send(err)
                 reject(err)
             }
             else {
-                //console.log("Result---- : ", docs);
                 creatorId = docs
-                //console.log("docs: ", docs)
                 resolve()
             }
         });
@@ -51,23 +48,18 @@ exports.singlePost = async function (req, res) {
 
 
     var uid1 = req.headers.uid
-    //console.log("UID:---------> ", uid1)
-    //if (uid1 == undefined)
-        //console.log("UNDEFINED")
     if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
-        //console.log("\n\n\nyayeyeyebeebbeveubveuue_)))))))))))))))))000000000000\n\n")
-        
-        
+
         var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
             if (err) res.status(404).send("not found");
             else {
-                if(doc == null) {
+                if (doc == null) {
                     res.status(404).send("not found");
                 } else {
                     append = {
                         test: [doc._doc.uid]
                     }
-                    map1 = {...doc._doc, ...append}
+                    map1 = { ...doc._doc, ...append }
                     res.status(200).send(map1)
                 }
             }
@@ -79,50 +71,33 @@ exports.singlePost = async function (req, res) {
 
         try {
             uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-            //console.log("uid:> ", uid1)
             imgLoc = findCreatorId(uid1, req.params.id).then(async () => {
-                //console.log("--------", creatorId, "----------")
                 let map
                 creatorId.forEach(element => {
                     map = element.state
                 });
-                //console.log(map)
 
 
                 var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
                     if (err) res.status(404).send("not found");
                     else {
-                        if(doc == null) {
+                        if (doc == null) {
                             res.status(404).send("not found");
                         } else {
                             let append1 = {
                                 test: [doc._doc.uid]
                             }
-                            map1 = {...doc._doc, ...append1}
+                            map1 = { ...doc._doc, ...append1 }
                             let append = {
                                 state: map
                             }
-                            map2 = {...map1, ...append}
+                            map2 = { ...map1, ...append }
                             res.status(200).send(map2)
                         }
                     }
                 })
 
-                // Post.findById(req.params.id, function (err, doc) { 
-                //     if (err){ 
-                //         res.status(404).send("not found")
-                //     } 
-                //     else{
-                //         append = {
-                //             state: map
-                //         }
-                //         map1 = {...doc._doc, ...append}
-                //         console.log(typeof (map1))
-                //         res.status(200).send(map1)
-                //     } 
-                // }); 
-
-             })
+            })
         } catch (err) {
             res.status(400).send(err)
         }

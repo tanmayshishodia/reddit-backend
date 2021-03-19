@@ -13,14 +13,6 @@ const PostState = require('../models/PostState')
 
 
 
-
-
-
-
-
-
-
-
 //----------------------------------------------------UPLOAD----------------------------------------------------------------
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ID,
@@ -253,4 +245,150 @@ exports.getAllPosts = function (req, res) {
             res.status(400).send(err)
         }
     }
+}
+
+
+
+
+
+//----------------------------------------------------SINGLE POST----------------------------------------------------------------
+function findCreatorId1(id, pid) {
+
+    return new Promise(async (resolve, reject) => {
+
+        const result = await PostState.find({ uid: id, postId: pid }, function (err, docs) {
+            if (err) {
+                res.status(500).send(err)
+                reject(err)
+            }
+            else {
+                creatorId = docs
+                resolve()
+            }
+        });
+    })
+}
+
+exports.singlePost = async function (req, res) {
+
+    var uid1 = req.headers.uid
+    if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
+
+        var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
+            if (err) res.status(404).send("not found");
+            else {
+                if (doc == null) {
+                    res.status(404).send("not found");
+                } else {
+                    append = {
+                        test: [doc._doc.uid]
+                    }
+                    map1 = { ...doc._doc, ...append }
+                    res.status(200).send(map1)
+                }
+            }
+        })
+
+    } else {
+
+        try {
+            uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+            imgLoc = findCreatorId1(uid1, req.params.id).then(async () => {
+                let map
+                creatorId.forEach(element => {
+                    map = element.state
+                });
+
+
+                var postWithExtra = await Post.findById(req.params.id).populate({ path: 'uid' }).exec(function (err, doc) {
+                    if (err) res.status(404).send("not found");
+                    else {
+                        if (doc == null) {
+                            res.status(404).send("not found");
+                        } else {
+                            let append1 = {
+                                test: [doc._doc.uid]
+                            }
+                            map1 = { ...doc._doc, ...append1 }
+                            let append = {
+                                state: map
+                            }
+                            map2 = { ...map1, ...append }
+                            res.status(200).send(map2)
+                        }
+                    }
+                })
+
+            })
+        } catch (err) {
+            res.status(400).send(err)
+        }
+    }
+}
+
+
+
+
+
+//----------------------------------------------------DELETE----------------------------------------------------------------
+
+//Deleting Post
+exports.deletePost = function (req, res) {
+
+    try {
+        var uid1 = req.headers.uid
+        uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+        Post.deleteOne({ uid: uid1, _id: req.params.id }, function (err) {
+            if (err)
+                res.status(204).send("Not found")
+            else {
+                Comment.deleteMany({ uid: uid1, postId: req.params.id }, function (err) {
+                    if (err) {
+                        res.send("Deletion Successful")
+                    } else {
+                        res.status(200).send("Deletion Successful")
+                    }
+                });
+            }
+        });
+    } catch (err) {
+        res.status(401).send("Unauthorized Access")
+    }
+
+}
+
+
+
+//----------------------------------------------------DELETE----------------------------------------------------------------
+
+//Editing Post
+exports.editPost = function (req, res) {
+
+    try {
+        var uid1 = req.headers.uid
+        uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+        
+        var myquery = { 
+            _id: mongoose.Types.ObjectId(req.params.id),
+            uid: uid1
+        }
+        var newvalues = {
+            $set: {
+                caption: req.body.caption,
+                desc: req.body.description
+            }
+        }
+        
+
+        Post.updateOne(
+            myquery, newvalues , function (err, result) {
+            if (err)
+                res.status(400).send("Something went wrong")
+            else
+                res.status(200).send(result)
+        })
+    } catch(err) {
+        res.status(401).send("Unauthorized Access")
+    }
+
 }
