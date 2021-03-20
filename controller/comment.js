@@ -3,6 +3,7 @@ let Post = require('../models/Post')
 let CommentState = require('../models/CommentState')
 let User = require('../models/User')
 const mongoose = require('mongoose')
+const updateKarma = require('./incrementKarma')
 
 
 
@@ -203,9 +204,9 @@ exports.postComment = async (req, res, next) => {
             parentId: parentId
         }
 
-        //upload to mongo
-        let commentUpload = new comment(post);
 
+        //upload to mongo
+        let commentUpload = new Comment(post);
         try {
             const a1 = await commentUpload.save()
             imgLoc = findCreatorId1(req.body.id).then(async () => {
@@ -216,7 +217,7 @@ exports.postComment = async (req, res, next) => {
                         res.send(post)
                     })
                 } else
-                res.send(post)
+                    res.send(post)
             })
         } catch (err) {
             res.status(400).send(err)

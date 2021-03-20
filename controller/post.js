@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 
 const Post = require('../models/Post')
 const UpdateKarma = require('./incrementKarma')
-const PostState = require('../models/PostState')
+const PostStateAll = require('../models/PostState')
 const Comment = require('../models/Comment')
 
 
@@ -396,13 +396,13 @@ exports.editPost = function (req, res) {
 
 //----------------------------------------------------POST STATE----------------------------------------------------------------
 
-exports.postState = async(req, res, next) => {
+exports.postStateAll = async(req, res, next) => {
     
     try {
 
         var uid1 = req.headers.uid
         uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
-        
+        console.log(uid1)
         const result = await PostState.find({ uid: uid1 }, function (err, docs) { 
             if (err){ 
                 res.status(400).send("Something went wrong")
@@ -415,4 +415,5 @@ exports.postState = async(req, res, next) => {
     } catch (err) {
         res.status(401).send("Unauthorized")
     }
+    
 }

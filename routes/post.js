@@ -12,6 +12,6 @@ router.post('/', Authorize(), Multer, Post.uploads)
 router.delete('/:id', Authorize(), Post.deletePost)
 router.put('/:id', Authorize(), Multer, Post.editPost)
 router.post('/vote/:id', Authorize(), VotePost.postState)
-router.get('/state', Authorize(), Post.postState)
+router.get('/state', Authorize(), Post.postStateAll)
 
 module.exports = router
