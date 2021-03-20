@@ -184,6 +184,22 @@ function findCreatorId1(id) {
     })
 }
 
+function findCreatorId2(id) {
+
+    return new Promise((resolve, reject) => {
+        Comment.findById(id, async (err, docs) => {
+            if (err) {
+                res.status(400).send(err)
+                reject(err)
+            }
+            else {
+                creatorId = docs.uid
+                resolve()
+            }
+        });
+    })
+}
+
 exports.postComment = async (req, res, next) => {
 
     try {
@@ -212,7 +228,7 @@ exports.postComment = async (req, res, next) => {
             imgLoc = findCreatorId1(req.body.id).then(async () => {
                 updateKarma.updateKarma(creatorId, req, "increment", 2)
                 if(req.body.pid != "null") {
-                    imgLoc = findCreatorId1(req.body.pid).then(async () => {
+                    imgLoc = findCreatorId2(req.body.pid).then(async () => {
                         updateKarma.updateKarma(creatorId, req, "increment", 1)
                         res.send(post)
                     })
