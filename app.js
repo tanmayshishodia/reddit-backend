@@ -107,19 +107,19 @@ app.use(express.json());
 
 // Routes
 app.use('/', require('./routes/index'))
-// app.use('/auth', require('./routes/auth'))
 app.use('/feed', require('./routes/api'))//DONE
 app.use('/leaderboard', require('./routes/leaderboard'))//DONE
 app.use('/profile', require('./routes/profile'))//DONE
 
-//NEW ROUTES
-app.use('/post', require('./routes/post'))
+//Post
+app.use('/post', require('./routes/post'));
+
+//Comment
+app.use('/comment', require('./routes/comment'));
 
 
 app.use(Sentry.Handlers.errorHandler());
 app.use(function onError(err, req, res, next) {
-  // The error id is attached to `res.sentry` to be returned
-  // and optionally displayed to the user for support.
   res.statusCode = 500;
   res.end(res.sentry + "\n");
 });

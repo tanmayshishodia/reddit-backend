@@ -22,31 +22,7 @@ function findCreatorId(id, pid) {
 }
 
 exports.singlePost = async function (req, res) {
-    let sort;
-    action = req.query.action
-    switch (action) {
-        case "top":
-            sort = {
-                votes: -1
-            }
-            break;
-        case "recent":
-            sort = {
-                createdAt: -1
-            }
-            break;
-        case "old":
-            sort = {
-                createdAt: 1
-            }
-            break;
-        default:
-            sort = {
-                votes: -1
-            }
-    }
-
-
+    
     var uid1 = req.headers.uid
     if (uid1 == "null" || uid1 == "\"\"" || uid1 == undefined) {
 

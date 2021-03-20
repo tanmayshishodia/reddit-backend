@@ -41,11 +41,11 @@ router.post('/votecomments/:id', authorize(), voteComments.commentState)
 //@route create login  POST /
 router.post('/login', Login.login)//DONE
 
-router.get('/poststate', StateSend.postState)//DONE
+router.get('/poststate', StateSend.postState)
 
 router.get('/comments/:id', getComments.getAllComments)//DONE
 
-router.get('/reply/:id', getReply.getAllReplies)//DONE
+router.get('/reply/:id', getReply.getAllReplies)
 
 router.get('/post/:id', SinglePost.singlePost)//DONE
 
