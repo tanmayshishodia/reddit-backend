@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 const Post = require('../models/Post')
 const UpdateKarma = require('./incrementKarma')
 const PostState = require('../models/PostState')
-
+const Comment = require('../models/Comment')
 
 
 
