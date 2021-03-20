@@ -1,5 +1,6 @@
 const Comment = require('../controller/comment')
 const Authorize = require('../middleware/authorize')
+const VoteComment = require('../controller/commentState')
 
 const express = require('express')
 const router = express.Router()
@@ -18,6 +19,9 @@ router.delete('/:id', Comment.deleteComment)
 
 //comment+reply route
 router.post('/', Comment.postComment)
+
+//vote reply+comment
+router.post('/vote/:id', Authorize(), VoteComment.commentState)
 
 
 module.exports = router

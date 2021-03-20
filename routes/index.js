@@ -27,13 +27,13 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth')
 router.post('/upload', authorize(), upload, post.uploads)//DONE
 
 //@route create comment  POST /
-router.post('/postComments/:id/:pid', authorize(), postComment.postComment)
+router.post('/postComments/:id/:pid', authorize(), postComment.postComment)//DONE
 
 //@route vote Posts
-router.post('/votePosts/:id', authorize(), votePosts.postState)
+router.post('/votePosts/:id', authorize(), votePosts.postState)//DONE
 
 //@route vote comments and replies
-router.post('/votecomments/:id', authorize(), voteComments.commentState)
+router.post('/votecomments/:id', authorize(), voteComments.commentState)//DONE
 
 //test route
 //router.post('/postStateTest', PostStateTest.postStateTest)
@@ -41,11 +41,13 @@ router.post('/votecomments/:id', authorize(), voteComments.commentState)
 //@route create login  POST /
 router.post('/login', Login.login)//DONE
 
-router.get('/poststate', StateSend.postState)
+router.get('/poststate', StateSend.postState)//DONE
+
+//and comment state
 
 router.get('/comments/:id', getComments.getAllComments)//DONE
 
-router.get('/reply/:id', getReply.getAllReplies)
+router.get('/reply/:id', getReply.getAllReplies)//DONE
 
 router.get('/post/:id', SinglePost.singlePost)//DONE
 
