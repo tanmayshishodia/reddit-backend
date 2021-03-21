@@ -65,16 +65,16 @@ describe("GET /post/:id", () => {
     }, 30000);
 });
 
-describe("GET /post/state", () => {
-    test("It responds with state of posts for different users in json format", async (done) => {
-        const response = await request(app).get("/post/state").set('uid', '"604fa60313489641f90db5ad"');
-        // expect(response.body[0]).toHaveProperty("uid");
-        // expect(response.body[0]).toHaveProperty("postId");
-        // expect(response.body[0]).toHaveProperty("state");
-        expect(response.statusCode).toBe(200);
-        done()
-    }, 30000);
-});
+// describe("GET /post/state", () => {
+//     test("It responds with state of posts for different users in json format", async (done) => {
+//         const response = await request(app).get("/post/state").set('uid', '"604fa60313489641f90db5ad"');
+//         // expect(response.body[0]).toHaveProperty("uid");
+//         // expect(response.body[0]).toHaveProperty("postId");
+//         // expect(response.body[0]).toHaveProperty("state");
+//         expect(response.statusCode).toBe(200);
+//         done()
+//     }, 30000);
+// });
 
 describe("PUT /post/:id", () => {
     test("Edit a post owned by an authenticated user", async () => {

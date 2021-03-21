@@ -4,7 +4,6 @@ const upload = require('../middleware/multer')
 
 const post = require('../controller/post')
 const postComment = require('../controller/postComment')
-const PostStateTest = require('../test/postStateTest')
 const Login = require('./login')
 const votePosts = require('../controller/postState')
 const StateSend = require('../controller/getPostState')

@@ -230,10 +230,10 @@ exports.postComment = async (req, res, next) => {
                 if(req.body.pid != "null") {
                     imgLoc = findCreatorId2(req.body.pid).then(async () => {
                         updateKarma.updateKarma(creatorId, req, "increment", 1)
-                        res.send(post)
+                        res.send(a1)
                     })
                 } else
-                    res.send(post)
+                    res.send(a1)
             })
         } catch (err) {
             res.status(400).send(err)

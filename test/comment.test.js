@@ -14,6 +14,9 @@ connectDB()
 var newCommentId;
 var newReplyId;
 
+const globalPostId = "60542a871a679200158d77c5"
+
+
 // describe("GET /comments/:id", () => {
 //     test("It responds with comments on a particular post and by which user", async (done) => {
 //         const response = await request(app).get("/comments/604fa778019cb9437f82e8ef")
@@ -65,10 +68,11 @@ describe("POST /comment", () => {
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
           "content": "hello",
-          "id": "60542a871a679200158d77c5",
+          "id": `${globalPostId}`,
           "pid": "null"
         });
-      newCommentId = JSON.parse(newComment.text)._id
+      newCommentId = newComment.body._id
+      console.log("id--->", newCommentId)
       expect(newComment.statusCode).toBe(200);
     }, 30000);
   });
@@ -79,9 +83,9 @@ describe("POST /comment", () => {
         .post("/comment")
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
-          content: "hello",
-          id: "60542a871a679200158d77c5",
-          pid: `${newCommentId}`
+          "content": "hello reply",
+          "id": `${globalPostId}`,
+          "pid": `${newCommentId}`
         });
       newReplyId = JSON.parse(newComment.text)._id
       expect(newComment.statusCode).toBe(200);
@@ -91,7 +95,7 @@ describe("POST /comment", () => {
   describe("POST /vote/:id", () => {
     test("Upvote a comment", async () => {
       const upvote = await request(app)
-        .post("/comment/vote/:id")
+        .post(`/comment/vote/${newCommentId}`)
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
           actions: "increment"
@@ -103,7 +107,7 @@ describe("POST /comment", () => {
   describe("POST /vote/:id", () => {
     test("Downvote a comment", async () => {
       const Downvote = await request(app)
-        .post("/comment/vote/:id")
+        .post(`/comment/vote/${newCommentId}`)
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
           actions: "decrement"
@@ -114,7 +118,7 @@ describe("POST /comment", () => {
 
   describe("GET /comment/:id", () => {
     test("It responds with comment", async (done) => {
-        const response = await request(app).get(`/comment/${newCommentId}`)
+        const response = await request(app).get(`/comment/${globalPostId}`)
         expect(response.statusCode).toBe(200);
         done()
     }, 50000);
@@ -122,7 +126,7 @@ describe("POST /comment", () => {
 
 describe("GET /comment/:id/:pid", () => {
   test("It responds with comment", async (done) => {
-      const response = await request(app).get(`/comment/60542a871a679200158d77c5/${newCommentId}`)
+      const response = await request(app).get(`/comment/${globalPostId}/${newCommentId}`)
       expect(response.statusCode).toBe(200);
       done()
   }, 50000);
