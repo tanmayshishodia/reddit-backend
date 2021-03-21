@@ -23,16 +23,16 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
 
 //@route create post   POST /
-router.post('/upload', authorize(), upload, post.uploads)//DONE
+//router.post('/upload', authorize(), upload, post.uploads)//DONE
 
 //@route create comment  POST /
-router.post('/postComments/:id/:pid', authorize(), postComment.postComment)//DONE
+//router.post('/postComments/:id/:pid', authorize(), postComment.postComment)//DONE
 
 //@route vote Posts
-router.post('/votePosts/:id', authorize(), votePosts.postState)//DONE
+//router.post('/votePosts/:id', authorize(), votePosts.postState)//DONE
 
 //@route vote comments and replies
-router.post('/votecomments/:id', authorize(), voteComments.commentState)//DONE
+//router.post('/votecomments/:id', authorize(), voteComments.commentState)//DONE
 
 //test route
 //router.post('/postStateTest', PostStateTest.postStateTest)
@@ -40,14 +40,14 @@ router.post('/votecomments/:id', authorize(), voteComments.commentState)//DONE
 //@route create login  POST /
 router.post('/login', Login.login)//DONE
 
-router.get('/poststate', StateSend.postState)//DONE
+//router.get('/poststate', StateSend.postState)//DONE
 
 //and comment state
 
-router.get('/comments/:id', getComments.getAllComments)//DONE
+//router.get('/comments/:id', getComments.getAllComments)//DONE
 
-router.get('/reply/:id', getReply.getAllReplies)//DONE
+//router.get('/reply/:id', getReply.getAllReplies)//DONE
 
-router.get('/post/:id', SinglePost.singlePost)//DONE
+//router.get('/post/:id', SinglePost.singlePost)//DONE
 
 module.exports = router

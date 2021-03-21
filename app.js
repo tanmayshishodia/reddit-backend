@@ -107,7 +107,7 @@ app.use(express.json());
 
 // Routes
 app.use('/', require('./routes/index'))
-app.use('/feed', require('./routes/api'))//DONE
+//app.use('/feed', require('./routes/api'))//DONE
 app.use('/leaderboard', require('./routes/leaderboard'))//DONE
 app.use('/profile', require('./routes/profile'))//DONE
 

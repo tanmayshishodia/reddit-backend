@@ -1,7 +1,7 @@
-let feedController = require('../controller/feed')
-const express = require('express')
-const router = express.Router()
+// let feedController = require('../controller/feed')
+// const express = require('express')
+// const router = express.Router()
 
-router.get('/', feedController.getAllPosts)
+// router.get('/', feedController.getAllPosts)
 
-module.exports = router
+// module.exports = router
