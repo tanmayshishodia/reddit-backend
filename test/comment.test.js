@@ -68,8 +68,8 @@ describe("POST /comment", () => {
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
           "content": "hello",
-          "id": `${globalPostId}`,
-          "pid": "null"
+          "postId": `${globalPostId}`,
+          "parentId": "null"
         });
       newCommentId = newComment.body._id
       console.log("id--->", newCommentId)
@@ -84,8 +84,8 @@ describe("POST /comment", () => {
         .set('uid', '"604fa60313489641f90db5ad"')
         .send({
           "content": "hello reply",
-          "id": `${globalPostId}`,
-          "pid": `${newCommentId}`
+          "postId": `${globalPostId}`,
+          "parentId": `${newCommentId}`
         });
       newReplyId = JSON.parse(newComment.text)._id
       expect(newComment.statusCode).toBe(200);
