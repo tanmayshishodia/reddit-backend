@@ -256,7 +256,7 @@ function findCreatorId1(id, pid) {
 
     return new Promise(async (resolve, reject) => {
 
-        const result = await PostState.find({ uid: id, postId: pid }, function (err, docs) {
+        const result = await PostStateAll.find({ uid: id, postId: pid }, function (err, docs) {
             if (err) {
                 res.status(500).send(err)
                 reject(err)
