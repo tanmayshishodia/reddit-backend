@@ -5,7 +5,8 @@ const User = require('../models/User')
 //Priviledged operations
 module.exports = () => {
     return (req, res, next) => {
-        var uid1 = req.headers['uid']
+        console.log(req.headers.uid)
+        var uid1 = req.headers.uid
         if(uid1 == undefined || uid1 == null || uid1 == "null" || uid1 == "\"\"" || uid1.length != 26 || !uid1) {
             //console.log("First line of defence")
             return res.status(401).send("unauthorized Access")

@@ -124,6 +124,6 @@ app.use(function onError(err, req, res, next) {
   res.end(res.sentry + "\n");
 });
 
-/*app.listen(3000)*/
+// app.listen(3000)
 
 module.exports = app

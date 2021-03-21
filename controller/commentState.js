@@ -27,7 +27,8 @@ function findCreatorId(id) {
 }
 
 exports.commentState = async (req, res, next) => {
-
+    console.log(req.body)
+    console.log(req.headers.uid)
     var uid1 = req.headers.uid
     uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
 
@@ -73,6 +74,7 @@ exports.commentState = async (req, res, next) => {
 
                         //res.json(a1)
                     } catch (err) {
+                        console.log({err})
                         res.status(401).send(err)
                     }
 
