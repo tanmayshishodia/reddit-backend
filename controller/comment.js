@@ -169,9 +169,10 @@ exports.deleteComment = function (req, res) {
 //---------------------------------------------POST COMMENTS/REPLY--------------------------------------------------
 
 function findCreatorId1(id) {
-
+    // console.log(id)
     return new Promise((resolve, reject) => {
         Post.findById(id, async (err, docs) => {
+            // console.log({docs})
             if (err) {
                 res.status(400).send(err)
                 reject(err)
@@ -205,11 +206,16 @@ exports.postComment = async (req, res, next) => {
     try {
         var uid1 = req.headers.uid
         uid1 = mongoose.Types.ObjectId(uid1.substring(1, uid1.length - 1));
+        // console.log(req.body)
         const content = req.body.content
-        const postId = req.body.id
-        let parentId = null
-        if (req.body.pid != "null")
-            parentId = req.body.pid
+        const postId = req.body.postId
+        // let parentId = null
+        var parentId;
+        if (req.body.parentId != "null")
+            parentId = req.body.parentId
+        else{
+            parentId = null
+        }
         const votes = 0
 
         post = {
@@ -225,10 +231,10 @@ exports.postComment = async (req, res, next) => {
         let commentUpload = new Comment(post);
         try {
             const a1 = await commentUpload.save()
-            imgLoc = findCreatorId1(req.body.id).then(async () => {
+            imgLoc = findCreatorId1(postId).then(async () => {
                 updateKarma.updateKarma(creatorId, req, "increment", 2)
-                if(req.body.pid != "null") {
-                    imgLoc = findCreatorId2(req.body.pid).then(async () => {
+                if(parentId != null) {
+                    imgLoc = findCreatorId2(parentId).then(async () => {
                         updateKarma.updateKarma(creatorId, req, "increment", 1)
                         res.send(a1)
                     })
