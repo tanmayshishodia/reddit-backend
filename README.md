@@ -1,4 +1,4 @@
-# reddit-backend [![Build Status](https://travis-ci.org/tanmayshishodia/reddit-backend.svg?branch=main)](https://travis-ci.org/tanmayshishodia/reddit-backend) [![Coverage Status](https://coveralls.io/repos/github/tanmayshishodia/reddit-backend/badge.svg)](https://coveralls.io/github/tanmayshishodia/reddit-backend)
+# reddit-backend [![Build Status](https://travis-ci.org/tanmayshishodia/reddit-backend.svg?branch=main)](https://travis-ci.org/tanmayshishodia/reddit-backend) [![Coverage Status](https://coveralls.io/repos/github/tanmayshishodia/reddit-backend/badge.svg?branch=main)](https://coveralls.io/github/tanmayshishodia/reddit-backend?branch=main)
 
 A web application for an open forum platform. Users can create a post and add comments to it. They will be rewarded with user badges and can see leaderboards.
 
